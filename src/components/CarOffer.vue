@@ -3,6 +3,14 @@
     <v-layout align-center justify-space-between row wrap>
       <v-container>
         <h2>Offer someone a ride</h2>
+        <vue-google-autocomplete
+          id="searchMap"
+          type= "text"
+          types="(cities)"
+          classname="input"
+          placeholder="Caută destinația"
+          @placechanged="getAddressData">
+        </vue-google-autocomplete>
         Departure date
         <v-flex xs12 sm6 md4>
           <v-menu
@@ -140,6 +148,7 @@
 
 <script>
 import LocalitiesRO from '@/components/LocalitiesRO'
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
 import firebase from '@/firebase'
 export default {
   name: 'HelloWorld',
@@ -167,7 +176,12 @@ export default {
       myMap: null    
     }
   },
+  components: { VueGoogleAutocomplete },
   methods: {
+    getAddressData (addressData, placeResultData, id) {
+      console.log(addressData, placeResultData, id)
+
+    },
     sendRequest () {
       firebase.firestore().collection('Requests').add({
         dateLeave: this.date,
@@ -197,17 +211,17 @@ export default {
       }).catch(error => {
         console.error('Error writing document: ', error)
       })
-    },
-    getCoordonates () {
-      var key ="ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c"
-      var url = "https://atlas.microsoft.com/search/address/{json}?subscription-key={ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c}&api-version=1.0&countrySet={"+this.localityLeave+"}"
+    }
+    // getCoordonates () {
+      // var key ="ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c"
+      // var url = "https://atlas.microsoft.com/search/address/{json}?subscription-key={ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c}&api-version=1.0&countrySet={"+this.localityLeave+"}"
       // const coords = new XMLHttpRequest()
       // coords.open("GET","https://atlas.microsoft.com/search/address/{json}?subscription-key={VJjFxD1jtVLs6dWJCk0525YfoFGy0rykYzz4Z_viEY4}&api-version=1.0&countrySet={",this.localityLeave,"}")
       // coords.onload = () => {
       //   const locationKey = JSON.parse(coords.responseText)
       //   console.log(coords)
       // }
-      fetch(url).then(data => {return data.json()}).then(res => {console.log(res)})
+      // fetch(url).then(data => {return data.json()}).then(res => {console.log(res)})
       // var client = new XMLHttpRequest();
       // client.open("GET",url);
       // client.send()
@@ -220,7 +234,7 @@ export default {
       //     //...check why request failed.
       //     console.log(response)
       // }
-    }
+    // }
   },
   created () {
     this.locations = LocalitiesRO
@@ -251,7 +265,7 @@ export default {
       marker.togglePopup()
     })
   })
-  this.getCoordonates ()
+  // this.getCoordonates ()
   }
 }
 </script>
