@@ -136,7 +136,7 @@
 import LocalitiesRO from '@/components/LocalitiesRO'
 import firebase from '@/firebase'
 export default {
-  name: 'CarOffer',
+  name: 'HelloWorld',
   data () {
     return {
       seats: ['1', '2', '3', '4', '5'],
