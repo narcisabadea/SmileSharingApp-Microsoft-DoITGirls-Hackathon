@@ -2,13 +2,14 @@
   <v-container>
     <v-layout align-center justify-space-between row wrap>
       <v-container>
-        <h2>Offer transportation</h2>
+        <h2>Find yourself a ride</h2>
         Departure date
         <v-flex xs12 sm6 md4>
           <v-menu
             v-model="menu1"
             :close-on-content-click="false"
             :nudge-right="40"
+            :return-value.sync="dateLeave"
             lazy
             transition="scale-transition"
             offset-y
@@ -31,23 +32,27 @@
           <v-autocomplete
             prepend-icon="location_on"
             label="Select location"
-            :items="locations">
+            :items="locations"
+            v-model = "localityLeave">
           </v-autocomplete>
           <v-autocomplete
             prepend-icon="access_time"
             label="Select hour of departure"
-            :items="hour">
+            :items="hour"
+            v-model="hourLeave">
           </v-autocomplete>
           <v-autocomplete
             prepend-icon="access_time"
             label="Select minutes"
-            :items="minutes">
+            :items="minutes"
+            v-model="minLeave">
           </v-autocomplete>
           <v-textarea
             auto-grow
             rows = 1
             prepend-icon="location_on"
-            label="Meeting point">
+            label="Meeting point"
+            v-model="meetingPoint">
           </v-textarea>
         </v-flex>
         Going to
@@ -55,13 +60,15 @@
           <v-autocomplete
             prepend-icon="location_on"
             label="Select location"
-            :items="locations">
+            :items="locations"
+            v-model = "localityGoing">
           </v-autocomplete>
           <v-textarea
             auto-grow
             rows = 1
             prepend-icon="location_on"
-            label="Drop off">
+            label="Drop off"
+            v-model="dropPoint">
           </v-textarea>
         </v-flex>
         Number of seats available
@@ -69,7 +76,8 @@
           <v-select
             prepend-icon="email"
             label="Select no. of seats"
-            :items="seats">
+            :items="seats"
+            v-model="noSeats">
           </v-select>
         </v-flex>
         Car description
@@ -78,16 +86,55 @@
             auto-grow
             rows = 1
             prepend-icon="location_on"
-            label="Short description">
+            label="Short description"
+            v-model="car">
+          </v-textarea>
+        </v-flex>
+        Price per person
+        <v-flex xs12 sm6 md4>
+          <v-textarea
+            auto-grow
+            rows = 1
+            prepend-icon="location_on"
+            label="Price (RON)"
+            v-model="price">
+          </v-textarea>
+        </v-flex>
+         Telephon number
+        <v-flex xs12 sm6 md4>
+          <v-textarea
+            auto-grow
+            rows = 1
+            prepend-icon="location_on"
+            label="Tel. no."
+            v-model="phone">
           </v-textarea>
         </v-flex>
       </v-container>
     </v-layout>
+    <v-btn
+      v-if="send === false"
+      color="primary"
+      flat
+      @click="sendRequest">
+      Post it!
+    </v-btn>
+    <v-card v-if="send === true">
+      <v-alert :value="true" type="success">
+        Success!
+      </v-alert>
+      <v-spacer></v-spacer>
+      <v-btn to="/" flat>
+        <v-icon left>keyboard_arrow_left</v-icon>
+        Back
+      </v-btn>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 import LocalitiesRO from '@/components/LocalitiesRO'
+import firebase from '@/firebase'
 export default {
   name: 'CarOffer',
   data () {
@@ -98,8 +145,53 @@ export default {
       date: new Date().toISOString().substr(0, 10),
       time: null,
       menu1: false,
-      menu2: false
+      menu2: false,
+      send: false,
+      localityLeave: '',
+      localityGoing: '',
+      hourLeave: '',
+      minLeave: '',
+      meetingPoint: '',
+      dropPoint:'',
+      noSeats: '',
+      car: '',
+      price: '',
+      phone: '',
+      dateLeave: null      
     }
+  },
+  methods: {
+    sendRequest () {
+      firebase.firestore().collection('Requests').add({
+        dateLeave: this.dateLeave,
+        localityLeave: this.localityLeave,
+        hourLeave: this.hourLeave,
+        minLeave: this.minLeave,
+        meetingPoint: this.meetingPoint,
+        localityGoing: this.localityGoing,
+        dropPoint: this.dropPoint,
+        noSeats: this.noSeats,
+        car: this.car,
+        price: this.price,
+        phone: this.phone
+      }).then(docRef => {
+          this.dateLeave = ''
+          this.localityLeave = ''
+          this.hourLeave = ''
+          this.minLeave = ''
+          this.meetingPoint = ''
+          this.localityGoing = ''
+          this.dropPoint = ''
+          this.noSeats = ''
+          this.car = ''
+          this.price = ''
+          this.phone = ''
+          this.send = true
+      }).catch(error => {
+        console.error('Error writing document: ', error)
+      })
+
+    },
   },
   created () {
     this.locations = LocalitiesRO
