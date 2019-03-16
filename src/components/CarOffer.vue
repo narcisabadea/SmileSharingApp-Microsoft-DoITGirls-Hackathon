@@ -33,6 +33,7 @@
             prepend-icon="location_on"
             label="Select location"
             :items="locations"
+            @change="getCoordonates()"
             v-model = "localityLeave">
           </v-autocomplete>
           <v-autocomplete
@@ -196,6 +197,29 @@ export default {
       }).catch(error => {
         console.error('Error writing document: ', error)
       })
+    },
+    getCoordonates () {
+      var key ="ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c"
+      var url = "https://atlas.microsoft.com/search/address/{json}?subscription-key={ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c}&api-version=1.0&countrySet={"+this.localityLeave+"}"
+      // const coords = new XMLHttpRequest()
+      // coords.open("GET","https://atlas.microsoft.com/search/address/{json}?subscription-key={VJjFxD1jtVLs6dWJCk0525YfoFGy0rykYzz4Z_viEY4}&api-version=1.0&countrySet={",this.localityLeave,"}")
+      // coords.onload = () => {
+      //   const locationKey = JSON.parse(coords.responseText)
+      //   console.log(coords)
+      // }
+      fetch(url).then(data => {return data.json()}).then(res => {console.log(res)})
+      // var client = new XMLHttpRequest();
+      // client.open("GET",url);
+      // client.send()
+      // client.onreadystatechange = (e) => {
+      //   console.log(client)
+      // }
+      // if(response)
+      //     console.log(response)
+      // else {
+      //     //...check why request failed.
+      //     console.log(response)
+      // }
     }
   },
   created () {
@@ -207,15 +231,27 @@ export default {
       center: [+26.10025, +44.4271325],
       authOptions: {
       authType: 'subscriptionKey',
-      subscriptionKey: 'VJjFxD1jtVLs6dWJCk0525YfoFGy0rykYzz4Z_viEY4'
+      subscriptionKey: 'ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c'
       }
     })
-    map.events.add("load", function() {
-      // Add Traffic Flow to the Map
-      map.setTraffic({
-          flow: "relative"
+    map.events.add('ready', function () {
+    //Create a HTML marker and add it to the map.
+    var marker = new window.atlas.HtmlMarker({
+      color: 'DodgerBlue',
+      text: '0',
+      position: [+26.10025, +44.4271325],
+      popup: new window.atlas.Popup({
+        content: '<div style="padding:10px">Start</div>',
+        pixelOffset: [0, -30]
       })
     })
+    map.markers.add(marker)
+    //Add a click event to toggle the popup.
+    map.events.add('click',marker, () => {
+      marker.togglePopup()
+    })
+  })
+  this.getCoordonates ()
   }
 }
 </script>
