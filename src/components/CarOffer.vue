@@ -2,7 +2,7 @@
   <v-container>
     <v-layout align-center justify-space-between row wrap>
       <v-container>
-        <h2>Offer transportation</h2>
+        <h2>Find yourself a ride</h2>
         Departure date
         <v-flex xs12 sm6 md4>
           <v-menu
@@ -81,8 +81,43 @@
             label="Short description">
           </v-textarea>
         </v-flex>
+        Price per person
+        <v-flex xs12 sm6 md4>
+          <v-textarea
+            auto-grow
+            rows = 1
+            prepend-icon="location_on"
+            label="Price (RON)">
+          </v-textarea>
+        </v-flex>
+         Telephon number
+        <v-flex xs12 sm6 md4>
+          <v-textarea
+            auto-grow
+            rows = 1
+            prepend-icon="location_on"
+            label="Tel. no.">
+          </v-textarea>
+        </v-flex>
       </v-container>
     </v-layout>
+    <v-btn
+      v-if="send === false"
+      color="primary"
+      flat
+      @click="sendRequest">
+      Post it!
+    </v-btn>
+    <v-card v-if="send === true">
+      <v-alert :value="true" type="success">
+        Success!
+      </v-alert>
+      <v-spacer></v-spacer>
+      <v-btn to="/" flat>
+        <v-icon left>keyboard_arrow_left</v-icon>
+        Back
+      </v-btn>
+    </v-card>
   </v-container>
 </template>
 
@@ -98,8 +133,34 @@ export default {
       date: new Date().toISOString().substr(0, 10),
       time: null,
       menu1: false,
-      menu2: false
+      menu2: false,
+      send: false
     }
+  },
+  methods: {
+    sendRequest () {
+      firebase.firestore().collection('Requests').add({
+        nameUniversity: this.item.nameUniversity,
+        descriptionUniversity: this.item.descriptionUniversity,
+        websiteUniversity: this.item.websiteUniversity,
+        locationUniversity: location,
+        status: 'pending'
+      }).then(docRef => {
+        firebase.firestore().collection('Users/').doc(firebase.auth().currentUser.uid).update({
+          requestId: docRef.id
+        })
+      }).catch(error => {
+        console.error('Error writing document: ', error)
+      })
+      this.item.nameUniversity = ''
+      this.item.descriptionUniversity = ''
+      this.item.websiteUniversity = ''
+      this.item.locationUniversity = ''
+      this.send = true
+      // firebase.firestore().collection('Users/').doc(this.userDetails.id).update({
+      //   type: 'requesting'
+      // })
+    },
   },
   created () {
     this.locations = LocalitiesRO
