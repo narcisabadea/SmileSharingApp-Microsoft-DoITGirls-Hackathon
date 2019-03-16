@@ -163,7 +163,7 @@ export default {
   methods: {
     sendRequest () {
       firebase.firestore().collection('Requests').add({
-        dateLeave: this.dateLeave,
+        dateLeave: this.date,
         localityLeave: this.localityLeave,
         hourLeave: this.hourLeave,
         minLeave: this.minLeave,
@@ -175,7 +175,7 @@ export default {
         price: this.price,
         phone: this.phone
       }).then(docRef => {
-          this.dateLeave = ''
+          this.date = ''
           this.localityLeave = ''
           this.hourLeave = ''
           this.minLeave = ''
