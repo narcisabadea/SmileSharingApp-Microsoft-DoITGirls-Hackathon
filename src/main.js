@@ -5,6 +5,7 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify)
+// router.push({ path: '/Home' })
 
 Vue.config.productionTip = false
 

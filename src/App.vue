@@ -1,7 +1,11 @@
 <template>
   <v-app>
     <v-toolbar dark color="primary">
-      <v-toolbar-title class="white--text">Smile Sharing</v-toolbar-title>
+      <v-toolbar-title class="white--text">
+        <router-link to="/Home" style="cursor:pointer; color: white;">
+          Smile Sharing
+        </router-link>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
        <v-menu offset-y>
         <v-btn
@@ -23,7 +27,7 @@
       </v-menu>
     </v-toolbar>
     <v-content>
-     <router-view/>
+     <router-view></router-view>
     </v-content>
   </v-app>
 </template>
@@ -38,5 +42,8 @@ export default {
       //
     }
   }
+  // components: {
+  //     default: HelloWorld    
+  //     }
 }
 </script>
