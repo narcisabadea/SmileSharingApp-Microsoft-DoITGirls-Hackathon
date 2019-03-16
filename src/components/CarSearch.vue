@@ -12,8 +12,15 @@
         <v-flex xs4 sm4>
           <v-autocomplete
             :items="localityGoingFilter"
-            label="Locality leaving"
+            label="Locality going"
             v-model="selectedlocalityGoing">
+          </v-autocomplete>
+        </v-flex>
+        <v-flex xs4 sm4>
+          <v-autocomplete
+            :items="carTypeFilter"
+            label="Select car"
+            v-model="selectedcarType">
           </v-autocomplete>
         </v-flex>
         <v-card-text>
@@ -41,7 +48,8 @@ export default {
       items: [],
       localityGoing: [],
       selectedLocalityLeave: 'All locations',
-      selectedlocalityGoing: 'All locations'
+      selectedlocalityGoing: 'All locations',
+      selectedcarType: 'All types'
     }
   },
   computed: {
@@ -50,6 +58,8 @@ export default {
         return this.selectedLocalityLeave === 'All locations' ? true : item.localityLeave === this.selectedLocalityLeave
       }).filter(item => {
         return this.selectedlocalityGoing === 'All locations' ? true : item.localityGoing === this.selectedlocalityGoing
+      }).filter(item => {
+        return this.selectedcarType === 'All types' ? true : item.car === this.selectedcarType
       })
     },
     localityLeaveFilter() {
@@ -65,6 +75,13 @@ export default {
         localityGoingFilterData.push(item.localityGoing)
       })
       return localityGoingFilterData
+    },
+    carTypeFilter() {
+      let carTypeData = ['All types']
+      this.items.forEach(item => {
+        carTypeData.push(item.car)
+      })
+      return carTypeData
     }
   },
   methods: {
