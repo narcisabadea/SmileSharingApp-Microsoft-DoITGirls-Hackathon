@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-toolbar dark color="primary">
-      <v-toolbar-side-icon></v-toolbar-side-icon>
       <v-toolbar-title class="white--text">Smile Sharing</v-toolbar-title>
       <v-spacer></v-spacer>
        <v-menu offset-y>
@@ -23,17 +22,17 @@
         </v-list>
       </v-menu>
     </v-toolbar>
+    <v-content>
+     <router-view/>
+    </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import router from '@/router'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
   data () {
     return {
       //
