@@ -6,6 +6,7 @@ import 'vuetify/dist/vuetify.min.css'
 import * as firebase from '@/firebase'
 
 Vue.use(Vuetify)
+// router.push({ path: '/Home' })
 
 Vue.config.productionTip = false
 
