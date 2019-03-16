@@ -1,5 +1,5 @@
 <template>
 <v-container>
-  Test
+  Test2
 </v-container>
 </template>
