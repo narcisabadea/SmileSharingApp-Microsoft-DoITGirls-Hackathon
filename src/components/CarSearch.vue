@@ -4,15 +4,13 @@
       <v-flex xs12>
         <v-card-text>
           <v-list three-line id="culoare">
-            <template v-for="(item, index) in getData">
-              <v-list-tile :key="index">
-                <v-list-tile-content>
-                  <v-list-tile-title> <span style="opacity: 0.3;color:grey">From </span> {{item.localityLeave}} <span style="opacity: 0.3;color:grey">({{item.hourLeave}}:{{item.minLeave}}) to </span>{{item.localityGoing}}</v-list-tile-title>
-                  <v-list-tile-sub-title class="text-truncate">Price: {{item.price}}RON</v-list-tile-sub-title>
-                  <v-divider></v-divider>
-                </v-list-tile-content>
-              </v-list-tile>
-            </template>
+            <v-list-tile v-for="(item, index) in items" :key="index">
+              <v-list-tile-content  >
+                <v-list-tile-title> <span style="opacity: 0.3;color:grey">From </span> {{item.localityLeave}} <span style="opacity: 0.3;color:grey">({{item.hourLeave}}:{{item.minLeave}}) to </span>{{item.localityGoing}}</v-list-tile-title>
+                <v-list-tile-sub-title class="text-truncate">Price: {{item.price}}RON</v-list-tile-sub-title>
+                <v-divider></v-divider>
+              </v-list-tile-content>
+            </v-list-tile>
           </v-list>
         </v-card-text>
       </v-flex>
@@ -26,16 +24,19 @@ export default {
   name: 'CarSearch',
   data () {
     return {
-      //
+      items: []
     }
   },
   computed: {
+    
+  },
+  methods: {
     getData() {
-      let data = []
+      let items = []
       firebase.firestore().collection('Requests')
         .onSnapshot(snapshot => {
           snapshot.forEach(obj => {
-            data.push({
+            items.push({
               id: obj.id,
               car: obj.data().car,
               dateLeave: obj.data().dateLeave,
@@ -51,8 +52,11 @@ export default {
             })
           })
         })
-      return data
+      return items
     }
+  },
+  created () {
+    this.items = this.getData()
   }
 }
 </script>
