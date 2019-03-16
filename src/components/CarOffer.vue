@@ -9,6 +9,7 @@
             v-model="menu1"
             :close-on-content-click="false"
             :nudge-right="40"
+            :return-value.sync="dateLeave"
             lazy
             transition="scale-transition"
             offset-y
@@ -31,23 +32,27 @@
           <v-autocomplete
             prepend-icon="location_on"
             label="Select location"
-            :items="locations">
+            :items="locations"
+            v-model = "localityLeave">
           </v-autocomplete>
           <v-autocomplete
             prepend-icon="access_time"
             label="Select hour of departure"
-            :items="hour">
+            :items="hour"
+            v-model="hourLeave">
           </v-autocomplete>
           <v-autocomplete
             prepend-icon="access_time"
             label="Select minutes"
-            :items="minutes">
+            :items="minutes"
+            v-model="minLeave">
           </v-autocomplete>
           <v-textarea
             auto-grow
             rows = 1
             prepend-icon="location_on"
-            label="Meeting point">
+            label="Meeting point"
+            v-model="meetingPoint">
           </v-textarea>
         </v-flex>
         Going to
@@ -55,13 +60,15 @@
           <v-autocomplete
             prepend-icon="location_on"
             label="Select location"
-            :items="locations">
+            :items="locations"
+            v-model = "localityGoing">
           </v-autocomplete>
           <v-textarea
             auto-grow
             rows = 1
             prepend-icon="location_on"
-            label="Drop off">
+            label="Drop off"
+            v-model="dropPoint">
           </v-textarea>
         </v-flex>
         Number of seats available
@@ -69,7 +76,8 @@
           <v-select
             prepend-icon="email"
             label="Select no. of seats"
-            :items="seats">
+            :items="seats"
+            v-model="noSeats">
           </v-select>
         </v-flex>
         Car description
@@ -78,7 +86,8 @@
             auto-grow
             rows = 1
             prepend-icon="location_on"
-            label="Short description">
+            label="Short description"
+            v-model="car">
           </v-textarea>
         </v-flex>
         Price per person
@@ -87,7 +96,8 @@
             auto-grow
             rows = 1
             prepend-icon="location_on"
-            label="Price (RON)">
+            label="Price (RON)"
+            v-model="price">
           </v-textarea>
         </v-flex>
          Telephon number
@@ -96,7 +106,8 @@
             auto-grow
             rows = 1
             prepend-icon="location_on"
-            label="Tel. no.">
+            label="Tel. no."
+            v-model="phone">
           </v-textarea>
         </v-flex>
       </v-container>
@@ -123,6 +134,7 @@
 
 <script>
 import LocalitiesRO from '@/components/LocalitiesRO'
+import firebase from '@/firebase'
 export default {
   name: 'HelloWorld',
   data () {
@@ -134,32 +146,51 @@ export default {
       time: null,
       menu1: false,
       menu2: false,
-      send: false
+      send: false,
+      localityLeave: '',
+      localityGoing: '',
+      hourLeave: '',
+      minLeave: '',
+      meetingPoint: '',
+      dropPoint:'',
+      noSeats: '',
+      car: '',
+      price: '',
+      phone: '',
+      dateLeave: null      
     }
   },
   methods: {
     sendRequest () {
       firebase.firestore().collection('Requests').add({
-        nameUniversity: this.item.nameUniversity,
-        descriptionUniversity: this.item.descriptionUniversity,
-        websiteUniversity: this.item.websiteUniversity,
-        locationUniversity: location,
-        status: 'pending'
+        dateLeave: this.dateLeave,
+        localityLeave: this.localityLeave,
+        hourLeave: this.hourLeave,
+        minLeave: this.minLeave,
+        meetingPoint: this.meetingPoint,
+        localityGoing: this.localityGoing,
+        dropPoint: this.dropPoint,
+        noSeats: this.noSeats,
+        car: this.car,
+        price: this.price,
+        phone: this.phone
       }).then(docRef => {
-        firebase.firestore().collection('Users/').doc(firebase.auth().currentUser.uid).update({
-          requestId: docRef.id
-        })
+          this.dateLeave = ''
+          this.localityLeave = ''
+          this.hourLeave = ''
+          this.minLeave = ''
+          this.meetingPoint = ''
+          this.localityGoing = ''
+          this.dropPoint = ''
+          this.noSeats = ''
+          this.car = ''
+          this.price = ''
+          this.phone = ''
+          this.send = true
       }).catch(error => {
         console.error('Error writing document: ', error)
       })
-      this.item.nameUniversity = ''
-      this.item.descriptionUniversity = ''
-      this.item.websiteUniversity = ''
-      this.item.locationUniversity = ''
-      this.send = true
-      // firebase.firestore().collection('Users/').doc(this.userDetails.id).update({
-      //   type: 'requesting'
-      // })
+
     },
   },
   created () {
