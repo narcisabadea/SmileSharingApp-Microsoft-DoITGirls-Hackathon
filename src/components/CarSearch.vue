@@ -26,9 +26,10 @@
         <v-card-text>
           <v-list three-line id="culoare">
             <v-list-tile v-for="(item, index) in filteredItems" :key="index">
-              <v-list-tile-content  >
+              <v-list-tile-content>
                 <v-list-tile-title> <span style="opacity: 0.3;color:grey">From </span> {{item.localityLeave}} <span style="opacity: 0.3;color:grey">({{item.hourLeave}}:{{item.minLeave}}) to </span>{{item.localityGoing}}</v-list-tile-title>
                 <v-list-tile-sub-title class="text-truncate">Price: {{item.price}}RON</v-list-tile-sub-title>
+                <v-btn depressed small @click="seeDetails(item.id, index)">See details</v-btn>
                 <v-divider></v-divider>
               </v-list-tile-content>
             </v-list-tile>
@@ -36,7 +37,30 @@
         </v-card-text>
       </v-flex>
     </v-layout>
+    <v-dialog v-model="dialog" max-width="80%" class="dialog">
+      <v-container fluid grid-list-xl>
+        <v-layout align-center justify-space-around row>
+          <v-flex xs12 md3>
+            <v-card class="elevation-0 transparent">
+              <v-card-text class="text-xs-center">
+                Car type: {{ selectedItem.car }}
+                Date leave: {{ selectedItem.dateLeave }}
+                Drop point: {{ selectedItem.dropPoint }}
+                Leave at: {{ selectedItem.hourLeave}}:{{selectedItem.minLeave }}
+                Locality going: {{ selectedItem.localityGoing }}
+                Locality leave: {{ selectedItem.localityLeave }}
+                Meeting point: {{ selectedItem.meetingPoint }}
+                Number of available seats: {{ selectedItem.noSeats }}
+                Phone number: {{ selectedItem.phone }}
+                Price: {{ selectedItem.price }}RON
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-dialog>
   </v-container>
+  
 </template>
 
 <script>
@@ -49,7 +73,9 @@ export default {
       localityGoing: [],
       selectedLocalityLeave: 'All locations',
       selectedlocalityGoing: 'All locations',
-      selectedcarType: 'All types'
+      selectedcarType: 'All types',
+      dialog: false,
+      selectedItem: {}
     }
   },
   computed: {
@@ -107,6 +133,10 @@ export default {
           })
         })
       return items
+    },
+    seeDetails(id, index) {
+      this.dialog = true
+      this.selectedItem = this.items[index]
     }
   },
   created () {
@@ -118,5 +148,8 @@ export default {
 <style>
   #culoare {
     background-color: transparent
+  }
+  .v-dialog {
+    background-color: white;
   }
 </style>
