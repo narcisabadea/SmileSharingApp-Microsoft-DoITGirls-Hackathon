@@ -2,7 +2,7 @@
   <v-container>
     <v-layout align-center justify-space-between row wrap>
       <v-container>
-        <h2>Find yourself a ride</h2>
+        <h2>Offer someone a ride</h2>
         Departure date
         <v-flex xs12 sm6 md4>
           <v-menu
@@ -111,6 +111,11 @@
           </v-textarea>
         </v-flex>
       </v-container>
+        <v-container fluid grid-list-md>
+          <v-flex>
+            <div id="myMap"></div>
+          </v-flex>
+        </v-container>
     </v-layout>
     <v-btn
       v-if="send === false"
@@ -157,7 +162,8 @@ export default {
       car: '',
       price: '',
       phone: '',
-      dateLeave: null      
+      dateLeave: null,
+      myMap: null    
     }
   },
   methods: {
@@ -190,11 +196,33 @@ export default {
       }).catch(error => {
         console.error('Error writing document: ', error)
       })
-
-    },
+    }
   },
   created () {
     this.locations = LocalitiesRO
   },
+  mounted () {
+  var map = new window.atlas.Map('myMap', {
+      zoom: 12,
+      center: [+26.10025, +44.4271325],
+      authOptions: {
+      authType: 'subscriptionKey',
+      subscriptionKey: 'VJjFxD1jtVLs6dWJCk0525YfoFGy0rykYzz4Z_viEY4'
+      }
+    })
+    map.events.add("load", function() {
+      // Add Traffic Flow to the Map
+      map.setTraffic({
+          flow: "relative"
+      })
+    })
+  }
 }
 </script>
+
+<style>
+#myMap {
+  width: 100%;
+  min-height: 570px;
+}
+</style>
