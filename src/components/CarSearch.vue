@@ -37,30 +37,46 @@
         </v-card-text>
       </v-flex>
     </v-layout>
-    <v-dialog v-model="dialog" max-width="80%" class="dialog">
-      <v-container fluid grid-list-xl>
-        <v-layout align-center justify-space-around row>
-          <v-flex xs12 md3>
-            <v-card class="elevation-0 transparent">
-              <v-card-text class="text-xs-center">
-                Car type: {{ selectedItem.car }}
-                Date leave: {{ selectedItem.dateLeave }}
-                Drop point: {{ selectedItem.dropPoint }}
-                Leave at: {{ selectedItem.hourLeave}}:{{selectedItem.minLeave }}
-                Locality going: {{ selectedItem.localityGoing }}
-                Locality leave: {{ selectedItem.localityLeave }}
-                Meeting point: {{ selectedItem.meetingPoint }}
-                Number of available seats: {{ selectedItem.noSeats }}
-                Phone number: {{ selectedItem.phone }}
-                Price: {{ selectedItem.price }}RON
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
+    <v-dialog v-model="dialog" max-width="30%" class="dialog">
+      <v-card class="elevation-12" transparent>
+        <v-card-title>Ride details</v-card-title>
+        <v-card-text class="text-xs-center">
+          <v-list dense>
+            <v-list-tile>
+              <v-list-tile-content>Car type: {{ selectedItem.car }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Date leave: {{ selectedItem.dateLeave }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Drop point: {{ selectedItem.dropPoint }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Leave at: {{ selectedItem.hourLeave}}:{{selectedItem.minLeave }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Locality going: {{ selectedItem.localityGoing }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Locality leave: {{ selectedItem.localityLeave }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Meeting point: {{ selectedItem.meetingPoint }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Number of available seats: {{ selectedItem.noSeats }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Phone number: {{ selectedItem.phone }}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Price: {{ selectedItem.price }}RON</v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-card-text>
+      </v-card>
     </v-dialog>
   </v-container>
-  
 </template>
 
 <script>
