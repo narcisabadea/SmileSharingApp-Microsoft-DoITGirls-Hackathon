@@ -3,15 +3,7 @@
     <v-layout align-center justify-space-between row wrap>
       <v-container>
         <h2>Offer someone a ride</h2>
-        <vue-google-autocomplete
-          id="searchMap"
-          type= "text"
-          types="(cities)"
-          classname="input"
-          placeholder="Caută destinația"
-          @placechanged="getAddressData">
-        </vue-google-autocomplete>
-        Departure date
+        <h4>Departure date</h4>
         <v-flex xs12 sm6 md4>
           <v-menu
             v-model="menu1"
@@ -37,6 +29,14 @@
         </v-flex>
         Leaving from
         <v-flex xs12 sm6 md4>
+          <vue-google-autocomplete
+            id="searchMap"
+            type= "text"
+            types="(cities)"
+            classname="input"
+            placeholder="Select location"
+            @placechanged="getAddressData">
+          </vue-google-autocomplete>
           <v-autocomplete
             prepend-icon="location_on"
             label="Select location"
