@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout align-center justify-space-around row fill-height>
-      <v-flex xs8>
+      <v-flex xs12>
         <v-card>
           <v-card-title>Account details</v-card-title>
           <v-card-text>
@@ -43,9 +43,9 @@
 
     </v-layout>
     <v-layout align-center justify-space-around row fill-height>
-      <v-flex xs8>
+      <v-flex xs12>
         <v-card>
-          <v-card-title>Scheduled</v-card-title>
+          <v-card-title>Scheduled rides found</v-card-title>
           <v-card-text>
             <v-list three-line id="culoare">
               <v-list-tile v-for="(item, index) in rides" :key="index">
@@ -59,7 +59,7 @@
                     {{item.localityGoing}}
                   </v-list-tile-title>
                   <v-list-tile-sub-title class="text-truncate">Price: {{item.price}}RON</v-list-tile-sub-title>
-                  <v-btn depressed small @click="seeDetails(item.id, index)">See details</v-btn>
+                  <v-btn depressed small @click="seeDetails(item.id, index, 'found')">See details</v-btn>
                   <v-divider></v-divider>
                 </v-list-tile-content>
               </v-list-tile>
@@ -70,9 +70,9 @@
     </v-layout>
 
     <v-layout align-center justify-space-around row fill-height>
-      <v-flex xs8>
+      <v-flex xs12>
         <v-card>
-          <v-card-title>My rides</v-card-title>
+          <v-card-title>Scheduled rides offer</v-card-title>
           <v-card-text>
             <v-list three-line id="culoare">
               <v-list-tile v-for="(item, index) in myrides" :key="index">
@@ -86,7 +86,7 @@
                     {{item.localityGoing}}
                   </v-list-tile-title>
                   <v-list-tile-sub-title class="text-truncate">Price: {{item.price}}RON</v-list-tile-sub-title>
-                  <v-btn depressed small @click="seeDetails(item.id, index)">See details</v-btn>
+                  <v-btn depressed small @click="seeDetails(item.id, index, 'offers')">See details</v-btn>
                   <v-divider></v-divider>
                 </v-list-tile-content>
               </v-list-tile>
@@ -95,6 +95,28 @@
         </v-card>
       </v-flex>
     </v-layout>
+        <v-dialog v-model="dialog" max-width="80%" class="dialog">
+      <v-container fluid grid-list-xl>
+        <v-layout align-center justify-space-around row>
+          <v-flex xs12 md3>
+            <v-card class="elevation-0 transparent">
+              <v-card-text class="text-xs-center">
+                Car type: {{ selectedItem.car }}
+                Date leave: {{ selectedItem.dateLeave }}
+                Drop point: {{ selectedItem.dropPoint }}
+                Leave at: {{ selectedItem.hourLeave}}:{{selectedItem.minLeave }}
+                Locality going: {{ selectedItem.localityGoing }}
+                Locality leave: {{ selectedItem.localityLeave }}
+                Meeting point: {{ selectedItem.meetingPoint }}
+                Number of available seats: {{ selectedItem.noSeats }}
+                Phone number: {{ selectedItem.phone }}
+                Price: {{ selectedItem.price }}RON
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -107,8 +129,20 @@ export default {
       data: null,
       myrides: null,
       rides: null,
-      myrides: null
+      myrides: null,
+      dialog: false,
+      selectedItem: {}
     };
+  },
+  methods: {
+    seeDetails(id, index, type) {
+      this.dialog = true
+      if (type === 'found') {
+        this.selectedItem = this.rides[index]
+      } else if (type === 'offers') {
+        this.selectedItem = this.myrides[index]
+      }
+    }
   },
   created() {
     this.data = JSON.parse(localStorage.getItem("details"));
