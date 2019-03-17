@@ -26,50 +26,43 @@
           <v-list-tile>
               <v-list-tile-title style="cursor:pointer">Log out</v-list-tile-title>
           </v-list-tile>
-          <v-divider></v-divider>
         </v-list>
       </v-menu>
     </v-toolbar>
     <v-content>
      <router-view></router-view>
     </v-content>
-    <v-dialog v-model="dialogLogIn" class="dialog"  max-width="100%" transparent>
-      <v-container fluid fill-height>
-        <v-layout align-center justify-center>
-          <v-flex xs12 sm8 md4>
-            <v-card class="elevation-12" transparent>
-              <v-card-text class="text-xs-center">
-                <v-icon x-large color="indigo darken-1">account_circle</v-icon>
-              </v-card-text>
-              <v-card-text>
-                <v-text-field
-                  v-model="email"
-                  label="Username">
-                </v-text-field>
-                <v-text-field
-                  v-model="password"
-                  label="Password"
-                  :append-icon="show ? 'visibility_off' : 'visibility'"
-                  :type="show ? 'text' : 'password'"
-                  @click:append="show = !show">
-                </v-text-field>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn type="submit" color="indigo darken-1 white--text"> Login
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-            <!-- <v-alert
-              :value="true"
-              type="error"
-              v-if="error !== null"
-            >
-              {{error}}
-            </v-alert> -->
-          </v-flex>
-        </v-layout>
-      </v-container>
+    <v-dialog v-model="dialogLogIn" class="dialog" max-width="30%">
+      <v-card class="elevation-12" transparent>
+        <v-card-text class="text-xs-center">
+          <v-icon x-large color="indigo darken-1">account_circle</v-icon>
+        </v-card-text>
+        <v-card-text>
+          <v-text-field
+            v-model="email"
+            label="Username">
+          </v-text-field>
+          <v-text-field
+            v-model="password"
+            label="Password"
+            :append-icon="show ? 'visibility_off' : 'visibility'"
+            :type="show ? 'text' : 'password'"
+            @click:append="show = !show">
+          </v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn type="submit" color="indigo darken-1 white--text"> Login
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+        <!-- <v-alert
+          :value="true"
+          type="error"
+          v-if="error !== null"
+        >
+          {{error}}
+        </v-alert> -->
     </v-dialog>
   </v-app>
 </template>
