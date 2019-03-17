@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout align-center justify-space-between row wrap>
+    <v-layout col wrap>
       <v-container>
         <h2>Offer someone a ride</h2>
         <h4>Departure date</h4>
@@ -35,15 +35,11 @@
             types="(cities)"
             classname="input"
             placeholder="Select location"
-            @placechanged="getAddressData">
-          </vue-google-autocomplete>
-          <v-autocomplete
-            prepend-icon="location_on"
-            label="Select location"
-            :items="locations"
-            @change="getCoordonates()"
+            @placechanged="getAddressData"
             v-model = "localityLeave">
-          </v-autocomplete>
+          </vue-google-autocomplete>
+        </v-flex>
+        <v-flex xs12 sm6 md4>
           <v-autocomplete
             prepend-icon="access_time"
             label="Select hour of departure"
@@ -66,12 +62,17 @@
         </v-flex>
         Going to
         <v-flex xs12 sm6 md4>
-          <v-autocomplete
-            prepend-icon="location_on"
-            label="Select location"
-            :items="locations"
+          <vue-google-autocomplete
+            id="searchMap2"
+            type= "text"
+            types="(cities)"
+            classname="input"
+            placeholder="Select going to location"
+            @placechanged="getAddressDataFinish"
             v-model = "localityGoing">
-          </v-autocomplete>
+          </vue-google-autocomplete>
+        </v-flex>
+        <v-flex xs12 sm6 md4>
           <v-textarea
             auto-grow
             rows = 1
@@ -177,7 +178,9 @@ export default {
       startLatitude: null,
       startLongitude: null,
       finishLatitude: null,
-      finishLongitude: null
+      finishLongitude: null,
+      datasource: '',
+      map: null
     }
   },
   components: { VueGoogleAutocomplete },
@@ -186,7 +189,13 @@ export default {
       this.startLatitude = addressData.latitude
       this.startLongitude = addressData.longitude
       this.maps()
-      // console.log(addressData.latitude, addressData.longitude)
+      console.log('start, ', this.startLatitude, this.startLongitude)
+    },
+    getAddressDataFinish (addressData, placeResultData, id) {
+      this.finishLatitude = addressData.latitude
+      this.finishLongitude = addressData.longitude
+      this.maps()
+      console.log('finish, ', this.finishLatitude, this.finishLongitude)
     },
     sendRequest () {
       firebase.firestore().collection('Requests').add({
@@ -220,17 +229,19 @@ export default {
       })
     },
     maps () {
-      var map = new window.atlas.Map('myMap', {
-      zoom: 12,
-      center: this.startLatitude && this.startLongitude ? [+this.startLongitude, +this.startLatitude] : [+26.10025, +44.4271325],
-      authOptions: {
-      authType: 'subscriptionKey',
-      subscriptionKey: 'ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c'
-      }
-    })
-      map.events.add('ready',  () => {
+      this.map = new window.atlas.Map('myMap', {
+        zoom: 12,
+        center: this.startLatitude && this.startLongitude ? [+this.startLongitude, +this.startLatitude] : (this.finishLatitude && this.finishLongitude ? [+this.finishLongitude, +this.finishLatitude] : [+26.10025, +44.4271325]),
+        authOptions: {
+        authType: 'subscriptionKey',
+        subscriptionKey: 'ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c'
+        }
+      })
+      this.map.events.add('ready',  () => {
       //Create a HTML marker and add it to the map.
-      if (this.startLatitude && this.startLongitude) {
+      if (this.startLatitude && this.startLongitude && this.finishLatitude && this.finishLongitude) {
+        this.route()
+      } else if (this.startLatitude && this.startLongitude) {
         console.log(this.startLatitude, this.startLongitude)
         var marker = new window.atlas.HtmlMarker({
           color: 'DodgerBlue',
@@ -241,12 +252,77 @@ export default {
             pixelOffset: [0, -30]
           })
         })
-        map.markers.add(marker)
+        this.map.markers.add(marker)
         //Add a click event to toggle the popup.
-        map.events.add('click',marker, () => {
+        this.map.events.add('click',marker, () => {
+          marker.togglePopup()
+        })
+      } else if (this.finishLatitude && this.finishLongitude) {
+        console.log(this.finishLatitude, this.finishLongitude)
+        var marker = new window.atlas.HtmlMarker({
+          color: 'DodgerBlue',
+          text: '0',
+          position: [+this.finishLongitude, +this.finishLatitude],
+          popup: new window.atlas.Popup({
+            content: '<div style="padding:10px">Start</div>',
+            pixelOffset: [0, -30]
+          })
+        })
+        this.map.markers.add(marker)
+        //Add a click event to toggle the popup.
+        this.map.events.add('click',marker, () => {
           marker.togglePopup()
         })
       }
+    })
+    },
+    route () {
+       var datasource = new window.atlas.source.DataSource()
+    this.map.sources.add(datasource)
+    this.map.layers.add(new window.atlas.layer.LineLayer(datasource, null, {
+        strokeColor: '#2272B9',
+        strokeWidth: 5,
+        lineJoin: 'round',
+        lineCap: 'round',
+        filter: ['==', '$type', 'LineString']
+    }), 'labels')
+    //Add a layer for rendering point data.
+    this.map.layers.add(new window.atlas.layer.SymbolLayer(datasource, null, {
+        iconOptions: {
+            image: ['get', 'icon'],
+            allowOverlap: true
+       },
+        textOptions: {
+            textField: ['get', 'title'],
+            offset: [0, 1.2]
+        },
+        filter: ['==', '$type', 'Point']
+    }))
+    var startPoint = new window.atlas.data.Feature(new window.atlas.data.Point([+this.startLongitude, +this.startLatitude]), {
+      title: "Start",
+      icon: "pin-blue"
+    })
+    var endPoint = new window.atlas.data.Feature(new window.atlas.data.Point([+this.finishLongitude, +this.finishLatitude]), {
+        title: "End",
+        icon: "pin-round-blue"
+    })
+    //Add the data to the data source.
+    datasource.add([startPoint, endPoint]);
+    this.map.setCamera({
+        bounds: window.atlas.data.BoundingBox.fromData([startPoint, endPoint]),
+        padding: 80
+    })
+    var subscriptionKeyCredential = new window.atlas.service.SubscriptionKeyCredential(window.atlas.getSubscriptionKey())
+    var pipeline = window.atlas.service.MapsURL.newPipeline(subscriptionKeyCredential)
+    var routeURL = new window.atlas.service.RouteURL(pipeline)
+    //Start and end point input to the routeURL
+    var coordinates= [[startPoint.geometry.coordinates[0], startPoint.geometry.coordinates[1]], [endPoint.geometry.coordinates[0], endPoint.geometry.coordinates[1]]];
+
+    //Make a search route request
+    routeURL.calculateRouteDirections(window.atlas.service.Aborter.timeout(10000), coordinates).then((directions) => {
+      //Get data features from response
+      var data = directions.geojson.getFeatures(); 
+      datasource.add(data);
     })
     }
   },
