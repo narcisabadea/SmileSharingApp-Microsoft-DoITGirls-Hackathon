@@ -20,13 +20,6 @@
             <v-spacer></v-spacer>
             <v-text-field
               prepend-icon="account_circle"
-              name="type"
-              label="Account type"
-              id="type"
-            ></v-text-field>  
-            <v-spacer></v-spacer>
-            <v-text-field
-              prepend-icon="account_circle"
               name="phone"
               label="Phone no."
               id="phone"
