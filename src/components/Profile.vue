@@ -7,16 +7,40 @@
             <v-text-field
               prepend-icon="account_circle"
               name="nume"
-              label="Nume"
+              label="Name"
               id="nume"
             ></v-text-field>
             <v-spacer></v-spacer>
             <v-text-field
               prepend-icon="account_circle"
               name="prenume"
-              label="Prenume"
+              label="Surname"
               id="prenume"
-            ></v-text-field>            
+            ></v-text-field>    
+            <v-spacer></v-spacer>
+            <v-text-field
+              prepend-icon="account_circle"
+              name="type"
+              label="Account type"
+              id="type"
+            ></v-text-field>  
+            <v-spacer></v-spacer>
+            <v-text-field
+              prepend-icon="account_circle"
+              name="phone"
+              label="Phone no."
+              id="phone"
+            ></v-text-field>   
+            <v-text-field
+              prepend-icon="account_circle"
+              name="email"
+              label="Email adress"
+              id="email"
+            ></v-text-field>  
+            <v-btn to="/" flat>
+              <v-icon left>keyboard_arrow_left</v-icon>
+              Back
+            </v-btn>    
           </v-card-text>
         </v-card>
       </v-flex>
