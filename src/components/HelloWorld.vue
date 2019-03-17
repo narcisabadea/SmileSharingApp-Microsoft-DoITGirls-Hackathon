@@ -1,7 +1,6 @@
 <template>
   <v-container bg fill-height grid-list-md text-xs-center>
     <v-layout row wrap align-center>
-
         <v-container fill-height>
           <v-layout align-center>
             <v-flex>
@@ -28,4 +27,7 @@ export default {
 </script>
 
 <style>
+img {
+  background-size:cover
+}
 </style>
