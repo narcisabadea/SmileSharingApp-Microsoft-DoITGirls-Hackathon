@@ -4,8 +4,8 @@
         <v-container fill-height>
           <v-layout align-center>
             <v-flex>
-              <v-btn flat to="CarOffer" slot="activator">Offer a car</v-btn>
-              <v-btn flat to="CarSearch" slot="activator">Search for a car</v-btn>
+              <v-btn flat to="CarOffer" slot="activator" style="background: #0B7A75">Offer a car</v-btn>
+              <v-btn flat to="CarSearch" slot="activator" style="background: #E9C46A">Search for a car</v-btn>
             </v-flex>
           </v-layout>
         </v-container>
@@ -13,7 +13,6 @@
     </v-layout>
   </v-container>
 </template>
-
 <script>
 
 export default {
