@@ -45,7 +45,7 @@
           <v-card-title>Scheduled rides found</v-card-title>
           <v-card-text>
             <v-list three-line id="culoare">
-              <v-list-tile v-for="(item, index) in rides" :key="index">
+              <v-list-tile v-for="(item, index) in myrides" :key="index">
                 <v-list-tile-content>
                   <v-list-tile-title>From
                     <span style="color: #0B7A75">{{item.localityLeave}}</span>
@@ -74,7 +74,7 @@
           <v-card-title>Scheduled rides offer</v-card-title>
           <v-card-text>
             <v-list three-line id="culoare">
-              <v-list-tile v-for="(item, index) in myrides" :key="index">
+              <v-list-tile v-for="(item, index) in rides" :key="index">
                 <v-list-tile-content>
                   <v-list-tile-title>From
                     <span style="color: #0B7A75">{{item.localityLeave}}</span>
@@ -181,13 +181,12 @@ export default {
           myrides: snapshot.data().myrides
         }
           localStorage.setItem('details', JSON.stringify(details))
-          this.data = JSON.parse(localStorage.getItem('details'))
+          this.data = details
       })
 
 
     let rides1 = [];
     this.data.rides.forEach(item => {
-      console.log(item);
       firebase
         .firestore()
         .collection("Requests")
