@@ -10,10 +10,11 @@
        <v-menu offset-y>
         <v-btn
           flat
+          v-if="userDetails"
           slot="activator">
           <v-icon left>account_circle</v-icon>Cont
         </v-btn>
-        <v-list>
+        <v-list v-if="userDetails">
           <v-list-tile>
             <router-link to="/Profile" tag="li" style="cursor:pointer">
               <v-list-tile-title>Detalii cont</v-list-tile-title>
@@ -38,8 +39,15 @@ export default {
   name: 'App',
   data () {
     return {
-      //
     }
+  },
+  computed: {
+    userDetails () {
+      return this.$store.getters.userDetails
+    }
+  },
+  created() {
+    this.$store.dispatch('getUserDetails')
   }
   // components: {
   //     default: HelloWorld    
