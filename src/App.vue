@@ -13,10 +13,11 @@
       <v-menu offset-y>
         <v-btn
           flat
+          v-if="userDetails"
           slot="activator">
           <v-icon left>account_circle</v-icon>Account
         </v-btn>
-        <v-list>
+        <v-list v-if="userDetails">
           <v-list-tile>
             <router-link to="/Profile" tag="li" style="cursor:pointer">
               <v-list-tile-title>Account details</v-list-tile-title>
@@ -87,6 +88,14 @@ export default {
       menu: false,
       show: false,
     }
+  },
+  computed: {
+    userDetails () {
+      return this.$store.getters.userDetails
+    }
+  },
+  created() {
+    this.$store.dispatch('getUserDetails')
   }
 }
 </script>
