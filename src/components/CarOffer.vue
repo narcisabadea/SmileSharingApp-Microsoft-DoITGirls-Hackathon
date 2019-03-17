@@ -127,8 +127,8 @@
           </v-flex>
           <v-btn
               v-if="send === false"
-              color="primary"
               flat
+              style="background: #0B7A75; color: white"
               @click="sendRequest">
               Post it!
             </v-btn>

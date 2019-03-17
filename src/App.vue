@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar dark color="primary">
+    <v-toolbar dark style="background: #19535F">
       <v-toolbar-title class="white--text">
         <router-link to="/Home" style="cursor:pointer; color: white;">
           Smile Sharing

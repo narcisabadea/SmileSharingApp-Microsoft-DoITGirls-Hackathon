@@ -23,13 +23,17 @@
             v-model="selectedcarType">
           </v-autocomplete>
         </v-flex>
+      </v-flex>
+    </v-layout>
+     <v-layout row justify-center>
+       <v-flex>
         <v-card-text>
           <v-list three-line id="culoare">
             <v-list-tile v-for="(item, index) in filteredItems" :key="index">
               <v-list-tile-content>
-                <v-list-tile-title> <span style="opacity: 0.3;color:grey">From </span> {{item.localityLeave}} <span style="opacity: 0.3;color:grey">({{item.hourLeave}}:{{item.minLeave}}) to </span>{{item.localityGoing}}</v-list-tile-title>
+                <v-list-tile-title> From <span style="color: #0B7A75"> {{item.localityLeave}}</span> ({{item.hourLeave}}:{{item.minLeave}}) to <span style="color: #0B7A75">{{item.localityGoing}}</span></v-list-tile-title>
                 <v-list-tile-sub-title class="text-truncate">Price: {{item.price}}RON</v-list-tile-sub-title>
-                <v-btn depressed small @click="seeDetails(item.id, index)">See details</v-btn>
+                <v-btn depressed small @click="seeDetails(item.id, index)" style="background: #E9C46A">See details</v-btn>
                 <v-divider></v-divider>
               </v-list-tile-content>
             </v-list-tile>
