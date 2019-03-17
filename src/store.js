@@ -28,7 +28,9 @@ export default new Vuex.Store({
             phone: snapshot.data().phone,
             type: snapshot.data().type,
             username: snapshot.id,
-            password: snapshot.data().password
+            password: snapshot.data().password,
+            rides: snapshot.data().rides,
+            myrides: snapshot.data().myrides
           }
           if (details.password === payload.password) {
             localStorage.setItem('details', JSON.stringify(details))

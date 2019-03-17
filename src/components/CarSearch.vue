@@ -128,7 +128,8 @@ export default {
               minLeave: obj.data().minLeave,
               noSeats: obj.data().noSeats,
               phone: obj.data().phone,
-              price: obj.data().price
+              price: obj.data().price,
+              participants: obj.data().participants
             })
           })
         })
