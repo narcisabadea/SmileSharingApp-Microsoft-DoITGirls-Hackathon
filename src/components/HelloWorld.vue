@@ -4,7 +4,8 @@
         <v-container fill-height>
           <v-layout align-center>
             <v-flex>
-              <v-btn flat to="CarOffer" slot="activator" style="background: #0B7A75">Car Offer</v-btn>
+              <img src="@/assets/car2.png" width="300px"><br>
+              <v-btn flat to="CarOffer" slot="activator" style="background: #0B7A75">Offer a car</v-btn>
               <v-btn flat to="CarSearch" slot="activator" style="background: #E9C46A">Search for a car</v-btn>
             </v-flex>
           </v-layout>

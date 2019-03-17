@@ -27,8 +27,9 @@
             <v-date-picker v-model="date" @input="menu1 = false"></v-date-picker>
           </v-menu>
         </v-flex>
-        Leaving from
+        <h4>Leaving from</h4>
         <v-flex xs8 sm8 md8>
+          <v-icon left>location_on</v-icon>
           <vue-google-autocomplete
             id="searchMap"
             type= "text"
@@ -59,8 +60,9 @@
             v-model="meetingPoint">
           </v-textarea>
         </v-flex>
-        Going to
+        <h4>Going to</h4>
         <v-flex xs8 sm8 md8>
+           <v-icon left>location_on</v-icon>
           <vue-google-autocomplete
             id="searchMap2"
             type= "text"
