@@ -271,14 +271,14 @@ export default {
             finishLongitude: this.finishLongitude
           })
           .then(docRef => {
-            let newRides = this.userDetails.rides;
+            let newRides = this.userDetails.myrides;
             newRides.push(docRef.id);
             firebase
           .firestore()
           .collection("Users/")
           .doc(this.userDetails.username)
           .update({
-            rides: newRides
+            myrides: newRides
           });
 
             this.date = "";
