@@ -1,4 +1,4 @@
-<template>
+<template style="background: #0B7A75"git >
   <v-container bg fill-height grid-list-md text-xs-center>
     <v-layout row wrap align-center>
         <v-container fill-height>

@@ -35,8 +35,7 @@
             types="(cities)"
             classname="input"
             placeholder="Select location"
-            @placechanged="getAddressData"
-            v-model = "localityLeave">
+            @placechanged="getAddressData">
           </vue-google-autocomplete>
         </v-flex>
         <v-flex xs8 sm8 md8>
@@ -68,8 +67,7 @@
             types="(cities)"
             classname="input"
             placeholder="Select going to location"
-            @placechanged="getAddressDataFinish"
-            v-model = "localityGoing">
+            @placechanged="getAddressDataFinish">
           </vue-google-autocomplete>
         </v-flex>
         <v-flex xs8 sm8 md8>
@@ -189,12 +187,14 @@ export default {
     getAddressData (addressData, placeResultData, id) {
       this.startLatitude = addressData.latitude
       this.startLongitude = addressData.longitude
+      this.localityLeave = addressData.locality
       this.maps()
       console.log('start, ', this.startLatitude, this.startLongitude)
     },
     getAddressDataFinish (addressData, placeResultData, id) {
       this.finishLatitude = addressData.latitude
       this.finishLongitude = addressData.longitude
+      this.localityGoing = addressData.locality
       this.maps()
       console.log('finish, ', this.finishLatitude, this.finishLongitude)
     },
@@ -210,7 +210,11 @@ export default {
         noSeats: this.noSeats,
         car: this.car,
         price: this.price,
-        phone: this.phone
+        phone: this.phone,
+        startLatitude: this.startLatitude,
+        startLongitude: this.startLongitude,
+        finishLatitude: this.finishLatitude,
+        finishLongitude: this.finishLongitude
       }).then(docRef => {
           console.error(docRef)
           this.date = ''
