@@ -142,7 +142,27 @@
             </v-card>
         </v-container>
     </v-layout>
-
+<v-dialog v-model="loginDialog" class="dialog" max-width="30%">
+      <v-card class="elevation-12" transparent>
+        <v-card-text class="text-xs-center">
+          <v-icon x-large color="indigo darken-1">account_circle</v-icon>
+        </v-card-text>
+        <v-card-text>
+          <v-text-field v-model="email" label="Username"></v-text-field>
+          <v-text-field
+            v-model="password"
+            label="Password"
+            :append-icon="show ? 'visibility_off' : 'visibility'"
+            :type="show ? 'text' : 'password'"
+            @click:append="show = !show"
+          ></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn type="submit" color="indigo darken-1 white--text" @click="login()">Login</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -162,6 +182,7 @@ export default {
       menu1: false,
       menu2: false,
       send: false,
+       show: false,
       localityLeave: '',
       localityGoing: '',
       hourLeave: '',
@@ -179,11 +200,26 @@ export default {
       finishLatitude: null,
       finishLongitude: null,
       datasource: '',
-      map: null
+      map: null,
+      loginDialog: false,
+      email: "",
+      password: ""
     }
   },
   components: { VueGoogleAutocomplete },
+  computed: {
+    userDetails() {
+      return this.$store.getters.userDetails;
+    }
+  },
   methods: {
+    login() {
+      this.$store.dispatch("login", {
+        username: this.email,
+        password: this.password
+      });
+      this.loginDialog = false;
+    },
     getAddressData (addressData, placeResultData, id) {
       this.startLatitude = addressData.latitude
       this.startLongitude = addressData.longitude
@@ -199,7 +235,8 @@ export default {
       console.log('finish, ', this.finishLatitude, this.finishLongitude)
     },
     sendRequest () {
-      firebase.firestore().collection('Requests').add({
+      if (this.userDetails) {
+firebase.firestore().collection('Requests').add({
         dateLeave: this.date,
         localityLeave: this.localityLeave,
         hourLeave: this.hourLeave,
@@ -232,6 +269,10 @@ export default {
       }).catch(error => {
         console.log('Error writing document: ', error)
       })
+      
+      } else {
+        this.loginDialog = true
+      }
     },
     maps () {
       this.map = new window.atlas.Map('myMap', {

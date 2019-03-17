@@ -214,7 +214,7 @@ export default {
         username: this.email,
         password: this.password
       });
-      this.dialogLogIn = false;
+      this.loginDialog = false;
     },
     seeDetails(id, index) {
       this.dialog = true;

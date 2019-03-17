@@ -166,6 +166,25 @@ export default {
   },
   created() {
     this.data = JSON.parse(localStorage.getItem("details"));
+
+  firebase.firestore().collection('Users').doc(this.data.username).get()
+      .then(snapshot => {
+        let details = {
+          name: snapshot.data().name,
+          surname: snapshot.data().surname,
+          email: snapshot.data().email,
+          phone: snapshot.data().phone,
+          type: snapshot.data().type,
+          username: snapshot.id,
+          password: snapshot.data().password,
+          rides: snapshot.data().rides,
+          myrides: snapshot.data().myrides
+        }
+          localStorage.setItem('details', JSON.stringify(details))
+          this.data = JSON.parse(localStorage.getItem('details'))
+      })
+
+
     let rides1 = [];
     this.data.rides.forEach(item => {
       console.log(item);
