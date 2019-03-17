@@ -7,7 +7,7 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="dialogLogIn = !dialogLogIn" flat>
+      <v-btn @click="dialogLogIn = !dialogLogIn" flat v-if="!userDetails">
         Login
       </v-btn>
       <v-menu offset-y v-if="userDetails">
@@ -51,7 +51,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn type="submit" color="indigo darken-1 white--text"> Login
+          <v-btn type="submit" color="indigo darken-1 white--text" @click="login()"> Login
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -80,6 +80,7 @@ export default {
   methods: {
     login () {
       this.$store.dispatch('login', {username: this.email, password: this.password})
+      this.dialogLogIn = false
     },
     logout(){
       this.$store.dispatch('logout')
