@@ -37,9 +37,7 @@
             ></v-text-field>
           </v-card-text>
         </v-card>
-        
       </v-flex>
-
     </v-layout>
     <v-layout align-center justify-space-around row fill-height>
       <v-flex xs12>
@@ -49,16 +47,18 @@
             <v-list three-line id="culoare">
               <v-list-tile v-for="(item, index) in rides" :key="index">
                 <v-list-tile-content>
-                  <v-list-tile-title>
-                    <span style="opacity: 0.3;color:grey">From</span>
-                    {{item.localityLeave}}
-                    <span
-                      style="opacity: 0.3;color:grey"
-                    >({{item.hourLeave}}:{{item.minLeave}}) to</span>
-                    {{item.localityGoing}}
+                  <v-list-tile-title>From
+                    <span style="color: #0B7A75">{{item.localityLeave}}</span>
+                    ({{item.hourLeave}}:{{item.minLeave}}) to
+                    <span style="color: #0B7A75">{{item.localityGoing}}</span>
                   </v-list-tile-title>
                   <v-list-tile-sub-title class="text-truncate">Price: {{item.price}}RON</v-list-tile-sub-title>
-                  <v-btn depressed small @click="seeDetails(item.id, index, 'found')">See details</v-btn>
+                  <v-btn
+                    depressed
+                    small
+                    @click="seeDetails(item.id, index, 'found')"
+                    style="background: #E9C46A"
+                  >See details</v-btn>
                   <v-divider></v-divider>
                 </v-list-tile-content>
               </v-list-tile>
@@ -76,16 +76,18 @@
             <v-list three-line id="culoare">
               <v-list-tile v-for="(item, index) in myrides" :key="index">
                 <v-list-tile-content>
-                  <v-list-tile-title>
-                    <span style="opacity: 0.3;color:grey">From</span>
-                    {{item.localityLeave}}
-                    <span
-                      style="opacity: 0.3;color:grey"
-                    >({{item.hourLeave}}:{{item.minLeave}}) to</span>
-                    {{item.localityGoing}}
+                  <v-list-tile-title>From
+                    <span style="color: #0B7A75">{{item.localityLeave}}</span>
+                    ({{item.hourLeave}}:{{item.minLeave}}) to
+                    <span style="color: #0B7A75">{{item.localityGoing}}</span>
                   </v-list-tile-title>
                   <v-list-tile-sub-title class="text-truncate">Price: {{item.price}}RON</v-list-tile-sub-title>
-                  <v-btn depressed small @click="seeDetails(item.id, index, 'offers')">See details</v-btn>
+                  <v-btn
+                    depressed
+                    small
+                    @click="seeDetails(item.id, index, 'offers')"
+                    style="background: #E9C46A"
+                  >See details</v-btn>
                   <v-divider></v-divider>
                 </v-list-tile-content>
               </v-list-tile>
@@ -95,7 +97,7 @@
       </v-flex>
     </v-layout>
     <v-dialog v-model="dialog" max-width="30%" class="dialog">
-      <v-card class="elevation-0 transparent">
+      <v-card class="elevation-12" transparent>
         <v-toolbar dark style="background: #19535f">
           <v-toolbar-title>Ride details</v-toolbar-title>
         </v-toolbar>
@@ -154,64 +156,86 @@ export default {
   },
   methods: {
     seeDetails(id, index, type) {
-      this.dialog = true
-      if (type === 'found') {
-        this.selectedItem = this.rides[index]
-      } else if (type === 'offers') {
-        this.selectedItem = this.myrides[index]
+      this.dialog = true;
+      if (type === "found") {
+        this.selectedItem = this.rides[index];
+      } else if (type === "offers") {
+        this.selectedItem = this.myrides[index];
       }
     }
   },
   created() {
     this.data = JSON.parse(localStorage.getItem("details"));
+
+  firebase.firestore().collection('Users').doc(this.data.username).get()
+      .then(snapshot => {
+        let details = {
+          name: snapshot.data().name,
+          surname: snapshot.data().surname,
+          email: snapshot.data().email,
+          phone: snapshot.data().phone,
+          type: snapshot.data().type,
+          username: snapshot.id,
+          password: snapshot.data().password,
+          rides: snapshot.data().rides,
+          myrides: snapshot.data().myrides
+        }
+          localStorage.setItem('details', JSON.stringify(details))
+          this.data = JSON.parse(localStorage.getItem('details'))
+      })
+
+
     let rides1 = [];
     this.data.rides.forEach(item => {
-      console.log(item)
-      firebase.firestore().collection('Requests').doc(item).get()
+      console.log(item);
+      firebase
+        .firestore()
+        .collection("Requests")
+        .doc(item)
+        .get()
         .then(obj => {
-          console.log(obj)
-          console.log(obj.data())
-            rides1.push({
-              id: obj.id,
-              car: obj.data().car,
-              dateLeave: obj.data().dateLeave,
-              dropPoint: obj.data().dropPoint,
-              hourLeave: obj.data().hourLeave,
-              localityGoing: obj.data().localityGoing,
-              localityLeave: obj.data().localityLeave,
-              meetingPoint: obj.data().meetingPoint,
-              minLeave: obj.data().minLeave,
-              noSeats: obj.data().noSeats,
-              phone: obj.data().phone,
-              price: obj.data().price
-            })
-          })
-        })
-        this.rides = rides1
-        let rides2 = []
+          rides1.push({
+            id: obj.id,
+            car: obj.data().car,
+            dateLeave: obj.data().dateLeave,
+            dropPoint: obj.data().dropPoint,
+            hourLeave: obj.data().hourLeave,
+            localityGoing: obj.data().localityGoing,
+            localityLeave: obj.data().localityLeave,
+            meetingPoint: obj.data().meetingPoint,
+            minLeave: obj.data().minLeave,
+            noSeats: obj.data().noSeats,
+            phone: obj.data().phone,
+            price: obj.data().price
+          });
+        });
+    });
+    this.rides = rides1;
+    let rides2 = [];
     this.data.myrides.forEach(item => {
-      console.log(item)
-      firebase.firestore().collection('Requests').doc(item).get()
+      firebase
+        .firestore()
+        .collection("Requests")
+        .doc(item)
+        .get()
         .then(obj => {
-          console.log(obj)
-          console.log(obj.data())
-            rides2.push({
-              id: obj.id,
-              car: obj.data().car,
-              dateLeave: obj.data().dateLeave,
-              dropPoint: obj.data().dropPoint,
-              hourLeave: obj.data().hourLeave,
-              localityGoing: obj.data().localityGoing,
-              localityLeave: obj.data().localityLeave,
-              meetingPoint: obj.data().meetingPoint,
-              minLeave: obj.data().minLeave,
-              noSeats: obj.data().noSeats,
-              phone: obj.data().phone,
-              price: obj.data().price
-            })
-          })
-        })
-        this.myrides = rides2
+          rides2.push({
+            id: obj.id,
+            car: obj.data().car,
+            dateLeave: obj.data().dateLeave,
+            dropPoint: obj.data().dropPoint,
+            hourLeave: obj.data().hourLeave,
+            localityGoing: obj.data().localityGoing,
+            localityLeave: obj.data().localityLeave,
+            meetingPoint: obj.data().meetingPoint,
+            minLeave: obj.data().minLeave,
+            noSeats: obj.data().noSeats,
+            phone: obj.data().phone,
+            price: obj.data().price
+          });
+        });
+    });
+    this.myrides = rides2;
   }
-}
+};
 </script>

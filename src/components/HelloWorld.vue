@@ -1,9 +1,10 @@
-<template>
+<template style="background: #0B7A75"git >
   <v-container bg fill-height grid-list-md text-xs-center>
     <v-layout row wrap align-center>
         <v-container fill-height>
           <v-layout align-center>
             <v-flex>
+              <img src="@/assets/car2.png" width="300px"><br>
               <v-btn flat to="CarOffer" slot="activator" style="background: #0B7A75">Offer a car</v-btn>
               <v-btn flat to="CarSearch" slot="activator" style="background: #E9C46A">Search for a car</v-btn>
             </v-flex>
