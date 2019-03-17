@@ -1,7 +1,8 @@
 <template>
   <v-container>
-    <v-layout>
-      <v-flex xs12>
+    <v-layout row justify-center>
+      <v-layout row wrap>
+      <!-- <v-flex xs12> -->
         <v-flex xs4 sm4>
           <v-autocomplete
             :items="localityLeaveFilter"
@@ -23,7 +24,8 @@
             v-model="selectedcarType">
           </v-autocomplete>
         </v-flex>
-      </v-flex>
+      <!-- </v-flex> -->
+      </v-layout>
     </v-layout>
      <v-layout row justify-center>
        <v-flex>
