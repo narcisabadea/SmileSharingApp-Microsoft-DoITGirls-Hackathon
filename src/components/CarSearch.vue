@@ -39,7 +39,9 @@
     </v-layout>
     <v-dialog v-model="dialog" max-width="30%" class="dialog">
       <v-card class="elevation-12" transparent>
-        <v-card-title>Ride details</v-card-title>
+        <v-toolbar dark style="background: #19535f">
+          <v-toolbar-title>Ride details</v-toolbar-title>
+        </v-toolbar>
         <v-card-text class="text-xs-center">
           <v-list dense>
             <v-list-tile>
@@ -74,6 +76,7 @@
             </v-list-tile>
           </v-list>
         </v-card-text>
+        <v-btn color="primary">I'm interested</v-btn>
       </v-card>
     </v-dialog>
   </v-container>
