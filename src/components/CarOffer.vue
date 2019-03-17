@@ -39,7 +39,7 @@
             v-model = "localityLeave">
           </vue-google-autocomplete>
         </v-flex>
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <v-autocomplete
             prepend-icon="access_time"
             label="Select hour of departure"
@@ -61,7 +61,7 @@
           </v-textarea>
         </v-flex>
         Going to
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <vue-google-autocomplete
             id="searchMap2"
             type= "text"
@@ -72,7 +72,7 @@
             v-model = "localityGoing">
           </vue-google-autocomplete>
         </v-flex>
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <v-textarea
             auto-grow
             rows = 1
