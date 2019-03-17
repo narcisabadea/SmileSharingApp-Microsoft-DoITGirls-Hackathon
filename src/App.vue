@@ -56,13 +56,6 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-        <!-- <v-alert
-          :value="true"
-          type="error"
-          v-if="error !== null"
-        >
-          {{error}}
-        </v-alert> -->
     </v-dialog>
   </v-app>
 </template>
