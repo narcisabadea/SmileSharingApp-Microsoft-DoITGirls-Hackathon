@@ -90,7 +90,15 @@
         <v-btn
           style="background: #E9C46A"
           @click="add(selectedItem.id)"
+          v-if ="!send"
         >{{ userDetails ? "I'm interested" : "Login"}}</v-btn>
+                <v-card v-if="send === true">
+          <v-alert :value="true" type="success">Success!</v-alert>
+          <v-spacer></v-spacer>
+          <v-btn to="/" flat>
+            <v-icon left>keyboard_arrow_left</v-icon>Back
+          </v-btn>
+        </v-card>
       </v-card>
     </v-dialog>
 
@@ -135,7 +143,8 @@ export default {
       selectedItem: {},
       loginDialog: false,
       email: "",
-      password: ""
+      password: "",
+      send: false
     };
   },
   computed: {
@@ -231,6 +240,7 @@ export default {
           .update({
             rides: newRides
           });
+          this.send = true
       } else {
         this.loginDialog = true
       }
