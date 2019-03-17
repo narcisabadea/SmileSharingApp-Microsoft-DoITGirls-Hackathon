@@ -10,21 +10,20 @@
       <v-btn @click="dialogLogIn = !dialogLogIn" flat>
         Login
       </v-btn>
-      <v-menu offset-y>
+      <v-menu offset-y v-if="userDetails">
         <v-btn
           flat
-          v-if="userDetails"
           slot="activator">
           <v-icon left>account_circle</v-icon>Account
         </v-btn>
-        <v-list v-if="userDetails">
+        <v-list>
           <v-list-tile>
             <router-link to="/Profile" tag="li" style="cursor:pointer">
               <v-list-tile-title>Account details</v-list-tile-title>
             </router-link>
           </v-list-tile>
           <v-list-tile>
-              <v-list-tile-title style="cursor:pointer">Log out</v-list-tile-title>
+              <v-list-tile-title style="cursor:pointer" @click="logout()">Log out</v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
@@ -61,7 +60,7 @@
 </template>
 
 <script>
-
+import firebase from '@/firebase'
 export default {
   name: 'App',
   data () {
@@ -76,6 +75,14 @@ export default {
   computed: {
     userDetails () {
       return this.$store.getters.userDetails
+    }
+  },
+  methods: {
+    login () {
+      this.$store.dispatch('login', {username: this.email, password: this.password})
+    },
+    logout(){
+      this.$store.dispatch('logout')
     }
   },
   created() {
