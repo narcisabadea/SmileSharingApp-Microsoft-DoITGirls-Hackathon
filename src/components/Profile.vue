@@ -21,7 +21,6 @@
               id="prenume"
             ></v-text-field>
             <v-spacer></v-spacer>
-            <v-spacer></v-spacer>
             <v-text-field
               prepend-icon="account_circle"
               name="phone"
