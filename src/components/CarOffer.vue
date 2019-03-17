@@ -1,10 +1,10 @@
 <template>
-  <v-container>
-    <v-layout align-center justify-space-between row wrap>
+  <v-container grid-list-sm>
+    <v-layout row>
       <v-container>
         <h2>Offer someone a ride</h2>
         <h4>Departure date</h4>
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <v-menu
             v-model="menu1"
             :close-on-content-click="false"
@@ -28,7 +28,7 @@
           </v-menu>
         </v-flex>
         Leaving from
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <vue-google-autocomplete
             id="searchMap"
             type= "text"
@@ -65,7 +65,7 @@
           </v-textarea>
         </v-flex>
         Going to
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <v-autocomplete
             prepend-icon="location_on"
             label="Select location"
@@ -81,7 +81,7 @@
           </v-textarea>
         </v-flex>
         Number of seats available
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <v-select
             prepend-icon="email"
             label="Select no. of seats"
@@ -90,7 +90,7 @@
           </v-select>
         </v-flex>
         Car description
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <v-textarea
             auto-grow
             rows = 1
@@ -100,7 +100,7 @@
           </v-textarea>
         </v-flex>
         Price per person
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <v-textarea
             auto-grow
             rows = 1
@@ -110,7 +110,7 @@
           </v-textarea>
         </v-flex>
          Telephon number
-        <v-flex xs12 sm6 md4>
+        <v-flex xs8 sm8 md8>
           <v-textarea
             auto-grow
             rows = 1
@@ -120,29 +120,30 @@
           </v-textarea>
         </v-flex>
       </v-container>
-        <v-container fluid grid-list-md>
+        <v-container grid-list-sm>
           <v-flex>
             <div id="myMap"></div>
           </v-flex>
+          <v-btn
+              v-if="send === false"
+              color="primary"
+              flat
+              @click="sendRequest">
+              Post it!
+            </v-btn>
+            <v-card v-if="send === true">
+              <v-alert :value="true" type="success">
+                Success!
+              </v-alert>
+              <v-spacer></v-spacer>
+              <v-btn to="/" flat>
+                <v-icon left>keyboard_arrow_left</v-icon>
+                Back
+              </v-btn>
+            </v-card>
         </v-container>
     </v-layout>
-    <v-btn
-      v-if="send === false"
-      color="primary"
-      flat
-      @click="sendRequest">
-      Post it!
-    </v-btn>
-    <v-card v-if="send === true">
-      <v-alert :value="true" type="success">
-        Success!
-      </v-alert>
-      <v-spacer></v-spacer>
-      <v-btn to="/" flat>
-        <v-icon left>keyboard_arrow_left</v-icon>
-        Back
-      </v-btn>
-    </v-card>
+
   </v-container>
 </template>
 
