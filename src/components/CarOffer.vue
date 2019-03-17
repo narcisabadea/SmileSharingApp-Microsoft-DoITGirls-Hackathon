@@ -182,6 +182,7 @@ export default {
         price: this.price,
         phone: this.phone
       }).then(docRef => {
+          console.error(docRef)
           this.date = ''
           this.localityLeave = ''
           this.hourLeave = ''
@@ -195,7 +196,7 @@ export default {
           this.phone = ''
           this.send = true
       }).catch(error => {
-        console.error('Error writing document: ', error)
+        console.log('Error writing document: ', error)
       })
     },
     getCoordonates () {
