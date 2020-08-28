@@ -235,6 +235,7 @@ export default {
       this.loginDialog = false;
     },
     getAddressData(addressData, placeResultData, id) {
+      console.log(placeResultData, id)
       this.startLatitude = addressData.latitude;
       this.startLongitude = addressData.longitude;
       this.localityLeave = addressData.locality;
@@ -242,6 +243,7 @@ export default {
       console.log("start, ", this.startLatitude, this.startLongitude);
     },
     getAddressDataFinish(addressData, placeResultData, id) {
+      console.log(placeResultData, id)
       this.finishLatitude = addressData.latitude;
       this.finishLongitude = addressData.longitude;
       this.localityGoing = addressData.locality;
@@ -342,7 +344,7 @@ export default {
           });
         } else if (this.finishLatitude && this.finishLongitude) {
           console.log(this.finishLatitude, this.finishLongitude);
-          var marker = new window.atlas.HtmlMarker({
+          var marker2 = new window.atlas.HtmlMarker({
             color: "DodgerBlue",
             text: "0",
             position: [+this.finishLongitude, +this.finishLatitude],
@@ -351,10 +353,10 @@ export default {
               pixelOffset: [0, -30]
             })
           });
-          this.map.markers.add(marker);
+          this.map.markers.add(marker2);
           //Add a click event to toggle the popup.
-          this.map.events.add("click", marker, () => {
-            marker.togglePopup();
+          this.map.events.add("click", marker2, () => {
+            marker2.togglePopup();
           });
         }
       });

@@ -7,7 +7,7 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="dialogLogIn = !dialogLogIn" flat v-if="!userDetails">
+      <v-btn @click="dialogLogIn = !dialogLogIn" text v-if="!userDetails">
         Login
       </v-btn>
       <v-menu offset-y v-if="userDetails">
@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import firebase from '@/firebase'
 export default {
   name: 'App',
   data () {

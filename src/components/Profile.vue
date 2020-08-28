@@ -147,7 +147,6 @@ export default {
   data() {
     return {
       data: null,
-      myrides: null,
       rides: null,
       myrides: null,
       dialog: false,
