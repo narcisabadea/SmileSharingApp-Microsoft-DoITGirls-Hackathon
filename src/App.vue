@@ -7,9 +7,7 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        @click="dialogLoginForm.showDialog = !dialogLoginForm.showDialog"
-      >
+      <v-btn @click="dialogLoginForm.showDialog = !dialogLoginForm.showDialog">
         Login
       </v-btn>
       <v-btn
@@ -17,32 +15,21 @@
       >
         Add route
       </v-btn>
-      <v-menu offset-y v-if="userDetails">
-        <v-btn slot="activator">
-          Account
-        </v-btn>
-        <v-list>
-          <v-list-tile>
-            <router-link to="/Profile" tag="li" style="cursor:pointer">
-              <v-list-tile-title>Account details</v-list-tile-title>
-            </router-link>
-          </v-list-tile>
-          <v-list-tile>
-            <v-list-tile-title style="cursor:pointer" @click="logout()"
-              >Log out</v-list-tile-title
-            >
-          </v-list-tile>
-        </v-list>
-      </v-menu>
+      <v-btn
+        @click="
+          dialogProfileDetails.showDialog = !dialogProfileDetails.showDialog
+        "
+      >
+        Account
+      </v-btn>
+      <v-btn @click="logout()">
+        Log out
+      </v-btn>
     </v-toolbar>
     <v-main>
       meh
     </v-main>
-    <v-dialog
-      v-model="dialogLoginForm.showDialog"
-      class="dialog"
-      max-width="80vw"
-    >
+    <v-dialog v-model="dialogLoginForm.showDialog" max-width="80vw">
       <v-card elevation="2" shaped>
         <v-card-title>
           Login
@@ -279,6 +266,207 @@
         </v-card>
       </v-container>
     </v-dialog>
+    <v-dialog v-model="dialogProfileDetails.showDialog" max-width="80vw">
+      <v-card elevation="2" shaped>
+        <v-flex xs12>
+          <v-card>
+            <v-card-title>Account details</v-card-title>
+            <v-card-text>
+              <v-text-field
+                prepend-icon="account_circle"
+                name="nume"
+                v-model="dialogProfileDetails.data.name"
+                label="Name"
+                id="nume"
+              ></v-text-field>
+              <v-spacer></v-spacer>
+              <v-text-field
+                prepend-icon="account_circle"
+                name="prenume"
+                label="Surname"
+                v-model="dialogProfileDetails.data.surname"
+                id="prenume"
+              ></v-text-field>
+              <v-spacer></v-spacer>
+              <v-text-field
+                prepend-icon="account_circle"
+                name="phone"
+                v-model="dialogProfileDetails.data.phone"
+                label="Phone no."
+                id="phone"
+              ></v-text-field>
+              <v-text-field
+                prepend-icon="account_circle"
+                name="email"
+                v-model="dialogProfileDetails.data.email"
+                label="Email adress"
+                id="email"
+              ></v-text-field>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs12>
+          <v-card>
+            <v-card-title>Scheduled rides found</v-card-title>
+            <v-card-text>
+              <v-list three-line id="culoare">
+                <v-list-tile
+                  v-for="(item, index) in dialogProfileDetails.myrides"
+                  :key="index"
+                >
+                  <v-list-tile-content>
+                    <v-list-tile-title
+                      >From
+                      <span style="color: #0B7A75">{{
+                        item.localityLeave
+                      }}</span>
+                      ({{ item.hourLeave }}:{{ item.minLeave }}) to
+                      <span style="color: #0B7A75">{{
+                        item.localityGoing
+                      }}</span>
+                    </v-list-tile-title>
+                    <v-list-tile-sub-title class="text-truncate"
+                      >Price: {{ item.price }}RON</v-list-tile-sub-title
+                    >
+                    <v-btn
+                      depressed
+                      small
+                      @click="seeDetails(item.id, index, 'found')"
+                      style="background: #E9C46A"
+                      >See details</v-btn
+                    >
+                    <v-divider></v-divider>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs12>
+          <v-card>
+            <v-card-title>Scheduled rides offer</v-card-title>
+            <v-card-text>
+              <v-list three-line id="culoare">
+                <v-list-tile
+                  v-for="(item, index) in dialogProfileDetails.rides"
+                  :key="index"
+                >
+                  <v-list-tile-content>
+                    <v-list-tile-title
+                      >From
+                      <span style="color: #0B7A75">{{
+                        item.localityLeave
+                      }}</span>
+                      ({{ item.hourLeave }}:{{ item.minLeave }}) to
+                      <span style="color: #0B7A75">{{
+                        item.localityGoing
+                      }}</span>
+                    </v-list-tile-title>
+                    <v-list-tile-sub-title class="text-truncate"
+                      >Price: {{ item.price }}RON</v-list-tile-sub-title
+                    >
+                    <v-btn
+                      depressed
+                      small
+                      @click="seeDetails(item.id, index, 'offers')"
+                      style="background: #E9C46A"
+                      >See details</v-btn
+                    >
+                    <v-divider></v-divider>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogRideDetails.showDialog" max-width="80vw">
+      <v-card elevation="2" shaped>
+        <v-toolbar dark style="background: #19535f">
+          <v-toolbar-title>Ride details</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text class="text-xs-center">
+          <v-list dense>
+            <v-list-tile>
+              <v-list-tile-content
+                >Car type:
+                {{ dialogRideDetails.selectedItem.car }}</v-list-tile-content
+              >
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content
+                >Date leave:
+                {{
+                  dialogRideDetails.selectedItem.dateLeave
+                }}</v-list-tile-content
+              >
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content
+                >Drop point:
+                {{
+                  dialogRideDetails.selectedItem.dropPoint
+                }}</v-list-tile-content
+              >
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content
+                >Leave at: {{ dialogRideDetails.selectedItem.hourLeave }}:{{
+                  dialogRideDetails.selectedItem.minLeave
+                }}</v-list-tile-content
+              >
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content
+                >Locality going:
+                {{
+                  dialogRideDetails.selectedItem.localityGoing
+                }}</v-list-tile-content
+              >
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content
+                >Locality leave:
+                {{
+                  dialogRideDetails.selectedItem.localityLeave
+                }}</v-list-tile-content
+              >
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content
+                >Meeting point:
+                {{
+                  dialogRideDetails.selectedItem.meetingPoint
+                }}</v-list-tile-content
+              >
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content
+                >Number of available seats:
+                {{
+                  dialogRideDetails.selectedItem.noSeats
+                }}</v-list-tile-content
+              >
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content
+                >Phone number:
+                {{ dialogRideDetails.selectedItem.phone }}</v-list-tile-content
+              >
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content
+                >Price:
+                {{
+                  dialogRideDetails.selectedItem.price
+                }}RON</v-list-tile-content
+              >
+            </v-list-tile>
+          </v-list>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -351,6 +539,17 @@ export default {
         finishLongitude: null,
         datasource: "",
         map: null,
+      },
+      dialogProfileDetails: {
+        showDialog: false,
+        data: null,
+        rides: null,
+        myrides: null,
+        dialog: false,
+      },
+      dialogRideDetails: {
+        showDialog: false,
+        selectedItem: {},
       },
     };
   },
@@ -607,9 +806,96 @@ export default {
           datasource.add(data);
         });
     },
+    seeDetails(id, index, type) {
+      this.dialogRideDetails.showDialog = true;
+      if (type === "found") {
+        this.dialogRideDetails.selectedItem = this.dialogProfileDetails.rides[
+          index
+        ];
+      } else if (type === "offers") {
+        this.dialogRideDetails.selectedItem = this.dialogProfileDetails.myrides[
+          index
+        ];
+      }
+    },
   },
   created() {
     this.$store.dispatch("getUserDetails");
+    this.dialogProfileDetails.data = JSON.parse(
+      localStorage.getItem("details")
+    );
+
+    firebase
+      .firestore()
+      .collection("Users")
+      .doc(this.dialogProfileDetails.data.username)
+      .get()
+      .then((snapshot) => {
+        let details = {
+          name: snapshot.data().name,
+          surname: snapshot.data().surname,
+          email: snapshot.data().email,
+          phone: snapshot.data().phone,
+          type: snapshot.data().type,
+          username: snapshot.id,
+          password: snapshot.data().password,
+          rides: snapshot.data().rides,
+          myrides: snapshot.data().myrides,
+        };
+        localStorage.setItem("details", JSON.stringify(details));
+        this.dialogProfileDetails.data = details;
+      });
+
+    let rides1 = [];
+    this.dialogProfileDetails.data.rides.forEach((item) => {
+      firebase
+        .firestore()
+        .collection("Requests")
+        .doc(item)
+        .get()
+        .then((obj) => {
+          rides1.push({
+            id: obj.id,
+            car: obj.data().car,
+            dateLeave: obj.data().dateLeave,
+            dropPoint: obj.data().dropPoint,
+            hourLeave: obj.data().hourLeave,
+            localityGoing: obj.data().localityGoing,
+            localityLeave: obj.data().localityLeave,
+            meetingPoint: obj.data().meetingPoint,
+            minLeave: obj.data().minLeave,
+            noSeats: obj.data().noSeats,
+            phone: obj.data().phone,
+            price: obj.data().price,
+          });
+        });
+    });
+    this.dialogProfileDetails.rides = rides1;
+    let rides2 = [];
+    this.dialogProfileDetails.data.myrides.forEach((item) => {
+      firebase
+        .firestore()
+        .collection("Requests")
+        .doc(item)
+        .get()
+        .then((obj) => {
+          rides2.push({
+            id: obj.id,
+            car: obj.data().car,
+            dateLeave: obj.data().dateLeave,
+            dropPoint: obj.data().dropPoint,
+            hourLeave: obj.data().hourLeave,
+            localityGoing: obj.data().localityGoing,
+            localityLeave: obj.data().localityLeave,
+            meetingPoint: obj.data().meetingPoint,
+            minLeave: obj.data().minLeave,
+            noSeats: obj.data().noSeats,
+            phone: obj.data().phone,
+            price: obj.data().price,
+          });
+        });
+    });
+    this.dialogProfileDetails.myrides = rides2;
   },
   mounted() {
     this.maps();
