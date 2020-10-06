@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import CarSearch from '@/components/CarSearch'
 import App from '@/App'
 
 Vue.use(Router)
@@ -12,11 +11,6 @@ export default new Router({
       name: 'App',
       component: App,
       redirect: 'Home'
-    },
-    {
-      path: '/CarSearch',
-      name: 'CarSearch',
-      component: CarSearch
     }
   ]
 })

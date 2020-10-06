@@ -27,7 +27,59 @@
       </v-btn>
     </v-toolbar>
     <v-main>
-      meh
+      <v-layout row justify-center>
+        <v-layout row wrap>
+          <!-- <v-flex xs12> -->
+          <v-flex xs4 sm4>
+            <v-autocomplete
+              :items="carSearchDetails.localityLeaveFilter"
+              label="Locality leaving"
+              v-model="carSearchDetails.selectedLocalityLeave"
+            ></v-autocomplete>
+          </v-flex>
+          <v-flex xs4 sm4>
+            <v-autocomplete
+              :items="carSearchDetails.localityGoingFilter"
+              label="Locality going"
+              v-model="carSearchDetails.selectedlocalityGoing"
+            ></v-autocomplete>
+          </v-flex>
+          <v-flex xs4 sm4>
+            <v-autocomplete
+              :items="carSearchDetails.carTypeFilter"
+              label="Select car"
+              v-model="carSearchDetails.selectedcarType"
+            ></v-autocomplete>
+          </v-flex>
+        </v-layout>
+      </v-layout>
+      <v-layout row justify-center>
+        <v-flex>
+          <v-card-text>
+            <v-list three-line id="culoare">
+              <v-list-tile v-for="(item, index) in filteredItems" :key="index">
+                <v-list-tile-content>
+                  <v-list-tile-title
+                    >From
+                    <span style="color: #0B7A75">{{ item.localityLeave }}</span>
+                    ({{ item.hourLeave }}:{{ item.minLeave }}) to
+                    <span style="color: #0B7A75">{{ item.localityGoing }}</span>
+                  </v-list-tile-title>
+                  <v-list-tile-sub-title class="text-truncate"
+                    >Price: {{ item.price }}RON</v-list-tile-sub-title
+                  >
+                  <!-- <v-btn
+                  depressed
+                  small
+                  @click="seeDetails(item.id, index)"
+                  style="background: #E9C46A"
+                >See details</v-btn> -->
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+          </v-card-text>
+        </v-flex>
+      </v-layout>
     </v-main>
     <v-dialog v-model="dialogLoginForm.showDialog" max-width="80vw">
       <v-card elevation="2" shaped>
@@ -465,6 +517,21 @@
             </v-list-tile>
           </v-list>
         </v-card-text>
+        <v-card-actions>
+          <v-btn
+            style="background: #E9C46A"
+            @click="add(dialogRideDetails.selectedItem.id)"
+            v-if="!dialogRideDetails.send"
+            >{{ userDetails ? "I'm interested" : "Login" }}</v-btn
+          >
+          <v-card v-if="dialogRideDetails.send === true">
+            <v-alert :value="true" type="success">Success!</v-alert>
+            <v-spacer></v-spacer>
+            <v-btn to="/" flat>
+              <v-icon left>keyboard_arrow_left</v-icon>Back
+            </v-btn>
+          </v-card>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-app>
@@ -542,7 +609,12 @@ export default {
       },
       dialogProfileDetails: {
         showDialog: false,
-        data: null,
+        data: {
+          name: '',
+          surname: '',
+          phone: '',
+          email: ''
+        },
         rides: null,
         myrides: null,
         dialog: false,
@@ -550,6 +622,14 @@ export default {
       dialogRideDetails: {
         showDialog: false,
         selectedItem: {},
+        send: false,
+      },
+      carSearchDetails: {
+        items: [],
+        localityGoing: [],
+        selectedLocalityLeave: "All locations",
+        selectedlocalityGoing: "All locations",
+        selectedcarType: "All types",
       },
     };
   },
@@ -557,6 +637,47 @@ export default {
   computed: {
     userDetails() {
       return this.$store.getters.userDetails;
+    },
+    filteredItems() {
+      return this.carSearchDetails.items
+        .filter((item) => {
+          return this.carSearchDetails.selectedLocalityLeave === "All locations"
+            ? true
+            : item.localityLeave ===
+                this.carSearchDetails.selectedLocalityLeave;
+        })
+        .filter((item) => {
+          return this.carSearchDetails.selectedlocalityGoing === "All locations"
+            ? true
+            : item.localityGoing ===
+                this.carSearchDetails.selectedlocalityGoing;
+        })
+        .filter((item) => {
+          return this.carSearchDetails.selectedcarType === "All types"
+            ? true
+            : item.car === this.carSearchDetails.selectedcarType;
+        });
+    },
+    localityLeaveFilter() {
+      let localityLeaveFilterData = ["All locations"];
+      this.carSearchDetails.items.forEach((item) => {
+        localityLeaveFilterData.push(item.localityLeave);
+      });
+      return localityLeaveFilterData;
+    },
+    localityGoingFilter() {
+      let localityGoingFilterData = ["All locations"];
+      this.carSearchDetails.items.forEach((item) => {
+        localityGoingFilterData.push(item.localityGoing);
+      });
+      return localityGoingFilterData;
+    },
+    carTypeFilter() {
+      let carTypeData = ["All types"];
+      this.carSearchDetails.items.forEach((item) => {
+        carTypeData.push(item.car);
+      });
+      return carTypeData;
     },
   },
   methods: {
@@ -816,16 +937,56 @@ export default {
         this.dialogRideDetails.selectedItem = this.dialogProfileDetails.myrides[
           index
         ];
+      } else if (type === "offer") {
+        this.dialogRideDetails.selectedItem = this.carSearchDetails.items[
+          index
+        ];
       }
     },
-  },
-  created() {
-    this.$store.dispatch("getUserDetails");
-    this.dialogProfileDetails.data = JSON.parse(
-      localStorage.getItem("details")
-    );
-
-    firebase
+    getData() {
+      let items = [];
+      firebase
+        .firestore()
+        .collection("Requests")
+        .onSnapshot((snapshot) => {
+          snapshot.forEach((obj) => {
+            items.push({
+              id: obj.id,
+              car: obj.data().car,
+              dateLeave: obj.data().dateLeave,
+              dropPoint: obj.data().dropPoint,
+              hourLeave: obj.data().hourLeave,
+              localityGoing: obj.data().localityGoing,
+              localityLeave: obj.data().localityLeave,
+              meetingPoint: obj.data().meetingPoint,
+              minLeave: obj.data().minLeave,
+              noSeats: obj.data().noSeats,
+              phone: obj.data().phone,
+              price: obj.data().price,
+              participants: obj.data().participants,
+            });
+          });
+        });
+      return items;
+    },
+    add(id) {
+      if (this.userDetails) {
+        let newRides = this.userDetails.rides;
+        newRides.push(id);
+        firebase
+          .firestore()
+          .collection("Users/")
+          .doc(this.userDetails.username)
+          .update({
+            rides: newRides,
+          });
+        this.send = true;
+      } else {
+        this.loginDialog = true;
+      }
+    },
+    getUserData() {
+          firebase
       .firestore()
       .collection("Users")
       .doc(this.dialogProfileDetails.data.username)
@@ -896,6 +1057,18 @@ export default {
         });
     });
     this.dialogProfileDetails.myrides = rides2;
+    }
+  },
+  created() {
+    this.$store.dispatch("getUserDetails");
+    this.dialogProfileDetails.data = JSON.parse(
+      localStorage.getItem("details")
+    );
+    this.carSearchDetails.items = this.getData();
+
+if (this.dialogProfileDetails.data) {
+    this.getUserData();
+}
   },
   mounted() {
     this.maps();
