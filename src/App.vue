@@ -327,6 +327,7 @@
               <v-text-field
                 prepend-icon="account_circle"
                 name="nume"
+                v-if="dialogProfileDetails.data.name"
                 v-model="dialogProfileDetails.data.name"
                 label="Name"
                 id="nume"
@@ -613,7 +614,8 @@ export default {
           name: '',
           surname: '',
           phone: '',
-          email: ''
+          email: '',
+          username: ''
         },
         rides: null,
         myrides: null,
@@ -1060,13 +1062,13 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("getUserDetails");
-    this.dialogProfileDetails.data = JSON.parse(
+    this.dialogProfileDetails.data = localStorage.getItem("details") !== null ? JSON.parse(
       localStorage.getItem("details")
-    );
+    ) : this.dialogProfileDetails.data;
     this.carSearchDetails.items = this.getData();
 
-if (this.dialogProfileDetails.data) {
+if (this.dialogProfileDetails.data.username !== '') {
+    this.$store.dispatch("getUserDetails");
     this.getUserData();
 }
   },
