@@ -2,115 +2,198 @@
   <v-container grid-list-sm>
     <v-layout row>
       <v-container>
-        <h2>Offer someone a ride</h2>
-        <h4>Departure date</h4>
-        <v-flex xs8 sm8 md8>
-          <v-menu
-            v-model="menu1"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="dateLeave"
-            lazy
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field v-model="date" prepend-icon="event" readonly v-on="on"></v-text-field>
-            </template>
-            <v-date-picker v-model="date" @input="menu1 = false"></v-date-picker>
-          </v-menu>
-        </v-flex>
-        <h4>Leaving from</h4>
-        <v-flex xs8 sm8 md8>
-          <v-icon left>location_on</v-icon>
-          <vue-google-autocomplete
-            id="searchMap"
-            type="text"
-            types="(cities)"
-            class="input"
-            placeholder="Select location"
-            @placechanged="getAddressData"
-          ></vue-google-autocomplete>
-        </v-flex>
-        <v-flex xs8 sm8 md8>
-          <v-autocomplete
-            prepend-icon="access_time"
-            label="Select hour of departure"
-            :items="hour"
-            v-model="hourLeave"
-          ></v-autocomplete>
-          <v-autocomplete
-            prepend-icon="access_time"
-            label="Select minutes"
-            :items="minutes"
-            v-model="minLeave"
-          ></v-autocomplete>
-          <v-textarea
-            auto-grow
-            rows="1"
-            prepend-icon="location_on"
-            label="Meeting point"
-            v-model="meetingPoint"
-          ></v-textarea>
-        </v-flex>
-        <h4>Going to</h4>
-        <v-flex xs8 sm8 md8>
-          <v-icon left>location_on</v-icon>
-          <vue-google-autocomplete
-            id="searchMap2"
-            type="text"
-            types="(cities)"
-            class="input"
-            placeholder="Select going to location"
-            @placechanged="getAddressDataFinish"
-          ></vue-google-autocomplete>
-        </v-flex>
-        <v-flex xs8 sm8 md8>
-          <v-textarea
-            auto-grow
-            rows="1"
-            prepend-icon="location_on"
-            label="Drop off"
-            v-model="dropPoint"
-          ></v-textarea>
-        </v-flex>Number of seats available
-        <v-flex xs8 sm8 md8>
-          <v-select
-            prepend-icon="email"
-            label="Select no. of seats"
-            :items="seats"
-            v-model="noSeats"
-          ></v-select>
-        </v-flex>Car description
-        <v-flex xs8 sm8 md8>
-          <v-textarea
-            auto-grow
-            rows="1"
-            prepend-icon="location_on"
-            label="Short description"
-            v-model="car"
-          ></v-textarea>
-        </v-flex>Price per person
-        <v-flex xs8 sm8 md8>
-          <v-textarea
-            auto-grow
-            rows="1"
-            prepend-icon="location_on"
-            label="Price (RON)"
-            v-model="price"
-          ></v-textarea>
-        </v-flex>Telephon number
-        <v-flex xs8 sm8 md8>
-          <v-textarea
-            auto-grow
-            rows="1"
-            prepend-icon="location_on"
-            label="Tel. no."
-            v-model="phone"
-          ></v-textarea>
-        </v-flex>
+        <v-card elevation="2" shaped>
+          <v-card-title>Add a trip</v-card-title>
+          <v-card-text>
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Departure date
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-menu
+                  v-model="menu1"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="dateLeave"
+                  lazy
+                  transition="scale-transition"
+                  offset-y
+                  full-width
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="date"
+                      readonly
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="date"
+                    @input="menu1 = false"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Leaving from
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-flex xs8 sm8 md8>
+                  <vue-google-autocomplete
+                    id="searchMap"
+                    type="text"
+                    types="(cities)"
+                    class="input"
+                    placeholder="Select location"
+                    @placechanged="getAddressData"
+                  ></vue-google-autocomplete>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Leaving time
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-row>
+                  <v-col cols="12" sm="6" align-self="center">
+                    <v-autocomplete
+                      label="Hour"
+                      :items="hour"
+                      v-model="hourLeave"
+                    ></v-autocomplete>
+                  </v-col>
+                  <v-col cols="12" sm="6" align-self="center">
+                    <v-autocomplete
+                      label="Minutes"
+                      :items="minutes"
+                      v-model="minLeave"
+                    ></v-autocomplete>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Meeting point
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-flex xs8 sm8 md8>
+                  <v-textarea
+                    auto-grow
+                    rows="1"
+                    v-model="meetingPoint"
+                  ></v-textarea>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Going to
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-flex xs8 sm8 md8>
+                  <vue-google-autocomplete
+                    id="searchMap2"
+                    type="text"
+                    types="(cities)"
+                    class="input"
+                    placeholder="Select going to location"
+                    @placechanged="getAddressDataFinish"
+                  ></vue-google-autocomplete>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Drop off
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-flex xs8 sm8 md8>
+                  <v-textarea
+                    auto-grow
+                    rows="1"
+                    v-model="dropPoint"
+                  ></v-textarea>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Seats available
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-flex xs8 sm8 md8>
+                  <!-- <v-radio-group v-model="row" row>
+                    <v-radio label="Option 1" value="radio-1"></v-radio>
+                    <v-radio label="Option 2" value="radio-2"></v-radio>
+                  </v-radio-group> -->
+
+                  <v-select
+                label="Select no. of seats"
+                :items="seats"
+                v-model="noSeats"
+              ></v-select>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Car description
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-flex xs8 sm8 md8>
+                  <v-textarea
+                    auto-grow
+                    rows="1"
+                    label="Short description"
+                    v-model="car"
+                  ></v-textarea>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Price per person
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-flex xs8 sm8 md8>
+                  <v-textarea
+                    auto-grow
+                    rows="1"
+                    label="Price (RON)"
+                    v-model="price"
+                  ></v-textarea>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="2" align-self="center">
+                Phone number
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-flex xs8 sm8 md8>
+                  <v-textarea
+                    auto-grow
+                    rows="1"
+                    label="Tel. no."
+                    v-model="phone"
+                  ></v-textarea>
+                </v-flex>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
       </v-container>
       <v-container grid-list-sm>
         <v-flex>
@@ -121,7 +204,8 @@
           flat
           style="background: #0B7A75; color: white"
           @click="sendRequest"
-        >Post it!</v-btn>
+          >Post it!</v-btn
+        >
         <v-card v-if="send === true">
           <v-alert :value="true" type="success">Success!</v-alert>
           <v-spacer></v-spacer>
@@ -136,6 +220,7 @@
         <v-card-text class="text-xs-center">
           <v-icon x-large color="indigo darken-1">account_circle</v-icon>
         </v-card-text>
+        <v-icon>mdi-home</v-icon>
         <v-card-text>
           <v-text-field v-model="email" label="Username"></v-text-field>
           <v-text-field
@@ -148,7 +233,12 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn type="submit" color="indigo darken-1 white--text" @click="login()">Login</v-btn>
+          <v-btn
+            type="submit"
+            color="indigo darken-1 white--text"
+            @click="login()"
+            >Login</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -188,7 +278,7 @@ export default {
         "20",
         "21",
         "22",
-        "23"
+        "23",
       ],
       minutes: ["00", "15", "30", "45"],
       date: new Date().toISOString().substr(0, 10),
@@ -217,25 +307,25 @@ export default {
       map: null,
       loginDialog: false,
       email: "",
-      password: ""
+      password: "",
     };
   },
   components: { VueGoogleAutocomplete },
   computed: {
     userDetails() {
       return this.$store.getters.userDetails;
-    }
+    },
   },
   methods: {
     login() {
       this.$store.dispatch("login", {
         username: this.email,
-        password: this.password
+        password: this.password,
       });
       this.loginDialog = false;
     },
     getAddressData(addressData, placeResultData, id) {
-      console.log(placeResultData, id)
+      console.log(placeResultData, id);
       this.startLatitude = addressData.latitude;
       this.startLongitude = addressData.longitude;
       this.localityLeave = addressData.locality;
@@ -243,7 +333,7 @@ export default {
       console.log("start, ", this.startLatitude, this.startLongitude);
     },
     getAddressDataFinish(addressData, placeResultData, id) {
-      console.log(placeResultData, id)
+      console.log(placeResultData, id);
       this.finishLatitude = addressData.latitude;
       this.finishLongitude = addressData.longitude;
       this.localityGoing = addressData.locality;
@@ -270,18 +360,18 @@ export default {
             startLatitude: this.startLatitude,
             startLongitude: this.startLongitude,
             finishLatitude: this.finishLatitude,
-            finishLongitude: this.finishLongitude
+            finishLongitude: this.finishLongitude,
           })
-          .then(docRef => {
+          .then((docRef) => {
             let newRides = this.userDetails.myrides;
             newRides.push(docRef.id);
             firebase
-          .firestore()
-          .collection("Users/")
-          .doc(this.userDetails.username)
-          .update({
-            myrides: newRides
-          });
+              .firestore()
+              .collection("Users/")
+              .doc(this.userDetails.username)
+              .update({
+                myrides: newRides,
+              });
 
             this.date = "";
             this.localityLeave = "";
@@ -296,7 +386,7 @@ export default {
             this.phone = "";
             this.send = true;
           })
-          .catch(error => {
+          .catch((error) => {
             console.log("Error writing document: ", error);
           });
       } else {
@@ -314,8 +404,8 @@ export default {
             : [+26.10025, +44.4271325],
         authOptions: {
           authType: "subscriptionKey",
-          subscriptionKey: "ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c"
-        }
+          subscriptionKey: "ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c",
+        },
       });
       this.map.events.add("ready", () => {
         //Create a HTML marker and add it to the map.
@@ -334,8 +424,8 @@ export default {
             position: [+this.startLongitude, +this.startLatitude],
             popup: new window.atlas.Popup({
               content: '<div style="padding:10px">Start</div>',
-              pixelOffset: [0, -30]
-            })
+              pixelOffset: [0, -30],
+            }),
           });
           this.map.markers.add(marker);
           //Add a click event to toggle the popup.
@@ -350,8 +440,8 @@ export default {
             position: [+this.finishLongitude, +this.finishLatitude],
             popup: new window.atlas.Popup({
               content: '<div style="padding:10px">Start</div>',
-              pixelOffset: [0, -30]
-            })
+              pixelOffset: [0, -30],
+            }),
           });
           this.map.markers.add(marker2);
           //Add a click event to toggle the popup.
@@ -370,7 +460,7 @@ export default {
           strokeWidth: 5,
           lineJoin: "round",
           lineCap: "round",
-          filter: ["==", "$type", "LineString"]
+          filter: ["==", "$type", "LineString"],
         }),
         "labels"
       );
@@ -379,40 +469,40 @@ export default {
         new window.atlas.layer.SymbolLayer(datasource, null, {
           iconOptions: {
             image: ["get", "icon"],
-            allowOverlap: true
+            allowOverlap: true,
           },
           textOptions: {
             textField: ["get", "title"],
-            offset: [0, 1.2]
+            offset: [0, 1.2],
           },
-          filter: ["==", "$type", "Point"]
+          filter: ["==", "$type", "Point"],
         })
       );
       var startPoint = new window.atlas.data.Feature(
         new window.atlas.data.Point([
           +this.startLongitude,
-          +this.startLatitude
+          +this.startLatitude,
         ]),
         {
           title: "Start",
-          icon: "pin-blue"
+          icon: "pin-blue",
         }
       );
       var endPoint = new window.atlas.data.Feature(
         new window.atlas.data.Point([
           +this.finishLongitude,
-          +this.finishLatitude
+          +this.finishLatitude,
         ]),
         {
           title: "End",
-          icon: "pin-round-blue"
+          icon: "pin-round-blue",
         }
       );
       //Add the data to the data source.
       datasource.add([startPoint, endPoint]);
       this.map.setCamera({
         bounds: window.atlas.data.BoundingBox.fromData([startPoint, endPoint]),
-        padding: 80
+        padding: 80,
       });
       var subscriptionKeyCredential = new window.atlas.service.SubscriptionKeyCredential(
         window.atlas.getSubscriptionKey()
@@ -425,9 +515,9 @@ export default {
       var coordinates = [
         [
           startPoint.geometry.coordinates[0],
-          startPoint.geometry.coordinates[1]
+          startPoint.geometry.coordinates[1],
         ],
-        [endPoint.geometry.coordinates[0], endPoint.geometry.coordinates[1]]
+        [endPoint.geometry.coordinates[0], endPoint.geometry.coordinates[1]],
       ];
 
       //Make a search route request
@@ -436,19 +526,19 @@ export default {
           window.atlas.service.Aborter.timeout(10000),
           coordinates
         )
-        .then(directions => {
+        .then((directions) => {
           //Get data features from response
           var data = directions.geojson.getFeatures();
           datasource.add(data);
         });
-    }
+    },
   },
   created() {
     this.locations = LocalitiesRO;
   },
   mounted() {
     this.maps();
-  }
+  },
 };
 </script>
 
