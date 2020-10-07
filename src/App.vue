@@ -1,86 +1,88 @@
 <template>
   <v-app>
-    <v-toolbar dark style="background: #19535F">
-      <v-toolbar-title class="white--text">
-        <router-link to="/Home" style="cursor:pointer; color: white;">
-          Smile Sharing
-        </router-link>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn @click="dialogLoginForm.showDialog = !dialogLoginForm.showDialog">
-        Login
-      </v-btn>
-      <v-btn
-        @click="dialogCarOfferForm.showDialog = !dialogCarOfferForm.showDialog"
-      >
-        Add route
-      </v-btn>
-      <v-btn
-        @click="
-          dialogProfileDetails.showDialog = !dialogProfileDetails.showDialog
-        "
-      >
-        Account
-      </v-btn>
-      <v-btn @click="logout()">
-        Log out
-      </v-btn>
-    </v-toolbar>
-    <v-main>
-      <v-layout row justify-center>
-        <v-layout row wrap>
-          <!-- <v-flex xs12> -->
-          <v-flex xs4 sm4>
-            <v-autocomplete
-              :items="carSearchDetails.localityLeaveFilter"
-              label="Locality leaving"
-              v-model="carSearchDetails.selectedLocalityLeave"
-            ></v-autocomplete>
-          </v-flex>
-          <v-flex xs4 sm4>
-            <v-autocomplete
-              :items="carSearchDetails.localityGoingFilter"
-              label="Locality going"
-              v-model="carSearchDetails.selectedlocalityGoing"
-            ></v-autocomplete>
-          </v-flex>
-          <v-flex xs4 sm4>
-            <v-autocomplete
-              :items="carSearchDetails.carTypeFilter"
-              label="Select car"
-              v-model="carSearchDetails.selectedcarType"
-            ></v-autocomplete>
-          </v-flex>
-        </v-layout>
-      </v-layout>
-      <v-layout row justify-center>
-        <v-flex>
-          <v-card-text>
-            <v-list three-line id="culoare">
-              <v-list-tile v-for="(item, index) in filteredItems" :key="index">
-                <v-list-tile-content>
-                  <v-list-tile-title
-                    >From
-                    <span style="color: #0B7A75">{{ item.localityLeave }}</span>
-                    ({{ item.hourLeave }}:{{ item.minLeave }}) to
-                    <span style="color: #0B7A75">{{ item.localityGoing }}</span>
-                  </v-list-tile-title>
-                  <v-list-tile-sub-title class="text-truncate"
-                    >Price: {{ item.price }}RON</v-list-tile-sub-title
-                  >
-                  <!-- <v-btn
-                  depressed
-                  small
-                  @click="seeDetails(item.id, index)"
-                  style="background: #E9C46A"
-                >See details</v-btn> -->
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
-          </v-card-text>
-        </v-flex>
-      </v-layout>
-    </v-main>
+    <div class="container-wrapper">
+      <div dark class="left-column">
+        <div class="toolbar">
+          <div class="title">
+            Smile Sharing
+          </div>
+          <div class="title-actions">
+            <v-btn
+              text
+              @click="dialogLoginForm.showDialog = !dialogLoginForm.showDialog"
+              v-if="!userDetails"
+            >
+              Login
+            </v-btn>
+            <v-btn
+              text
+              @click="
+                dialogCarOfferForm.showDialog = !dialogCarOfferForm.showDialog
+              "
+              v-if="userDetails"
+            >
+              Add route
+            </v-btn>
+            <v-btn
+              text
+              @click="
+                dialogProfileDetails.showDialog = !dialogProfileDetails.showDialog
+              "
+              v-if="userDetails"
+            >
+              Account
+            </v-btn>
+            <v-btn text @click="logout()" v-if="userDetails">
+              Log out
+            </v-btn>
+          </div>
+        </div>
+        <div class="filters">
+          <v-autocomplete
+            :items="carSearchDetails.localityLeaveFilter"
+            label="Locality leaving"
+            v-model="carSearchDetails.selectedLocalityLeave"
+          ></v-autocomplete>
+          <v-autocomplete
+            :items="carSearchDetails.localityGoingFilter"
+            label="Locality going"
+            v-model="carSearchDetails.selectedlocalityGoing"
+          ></v-autocomplete>
+          <v-autocomplete
+            :items="carSearchDetails.carTypeFilter"
+            label="Select car"
+            v-model="carSearchDetails.selectedcarType"
+          ></v-autocomplete>
+        </div>
+        <div class="results">
+          <div
+            v-for="(item, index) in filteredItems"
+            :key="index"
+            class="result-item"
+          >
+            <div class="location-wrapper">
+              From
+              <span class="location-locality">{{ item.localityLeave }}</span>
+              ({{ item.hourLeave }}:{{ item.minLeave }}) to
+              <span class="location-locality">{{ item.localityGoing }}</span>
+            </div>
+            <div class="result-price">Price: {{ item.price }}RON</div>
+            <div class="result-item-action">
+              <v-btn
+                depressed
+                small
+                @click="seeDetails(item.id, index)"
+                style="background: #E9C46A"
+                >See details</v-btn
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right-column">
+        map
+      </div>
+    </div>
     <v-dialog v-model="dialogLoginForm.showDialog" max-width="80vw">
       <v-card elevation="2" shaped>
         <v-card-title>
@@ -611,11 +613,11 @@ export default {
       dialogProfileDetails: {
         showDialog: false,
         data: {
-          name: '',
-          surname: '',
-          phone: '',
-          email: '',
-          username: ''
+          name: "",
+          surname: "",
+          phone: "",
+          email: "",
+          username: "",
         },
         rides: null,
         myrides: null,
@@ -988,89 +990,90 @@ export default {
       }
     },
     getUserData() {
-          firebase
-      .firestore()
-      .collection("Users")
-      .doc(this.dialogProfileDetails.data.username)
-      .get()
-      .then((snapshot) => {
-        let details = {
-          name: snapshot.data().name,
-          surname: snapshot.data().surname,
-          email: snapshot.data().email,
-          phone: snapshot.data().phone,
-          type: snapshot.data().type,
-          username: snapshot.id,
-          password: snapshot.data().password,
-          rides: snapshot.data().rides,
-          myrides: snapshot.data().myrides,
-        };
-        localStorage.setItem("details", JSON.stringify(details));
-        this.dialogProfileDetails.data = details;
-      });
+      firebase
+        .firestore()
+        .collection("Users")
+        .doc(this.dialogProfileDetails.data.username)
+        .get()
+        .then((snapshot) => {
+          let details = {
+            name: snapshot.data().name,
+            surname: snapshot.data().surname,
+            email: snapshot.data().email,
+            phone: snapshot.data().phone,
+            type: snapshot.data().type,
+            username: snapshot.id,
+            password: snapshot.data().password,
+            rides: snapshot.data().rides,
+            myrides: snapshot.data().myrides,
+          };
+          localStorage.setItem("details", JSON.stringify(details));
+          this.dialogProfileDetails.data = details;
+        });
 
-    let rides1 = [];
-    this.dialogProfileDetails.data.rides.forEach((item) => {
-      firebase
-        .firestore()
-        .collection("Requests")
-        .doc(item)
-        .get()
-        .then((obj) => {
-          rides1.push({
-            id: obj.id,
-            car: obj.data().car,
-            dateLeave: obj.data().dateLeave,
-            dropPoint: obj.data().dropPoint,
-            hourLeave: obj.data().hourLeave,
-            localityGoing: obj.data().localityGoing,
-            localityLeave: obj.data().localityLeave,
-            meetingPoint: obj.data().meetingPoint,
-            minLeave: obj.data().minLeave,
-            noSeats: obj.data().noSeats,
-            phone: obj.data().phone,
-            price: obj.data().price,
+      let rides1 = [];
+      this.dialogProfileDetails.data.rides.forEach((item) => {
+        firebase
+          .firestore()
+          .collection("Requests")
+          .doc(item)
+          .get()
+          .then((obj) => {
+            rides1.push({
+              id: obj.id,
+              car: obj.data().car,
+              dateLeave: obj.data().dateLeave,
+              dropPoint: obj.data().dropPoint,
+              hourLeave: obj.data().hourLeave,
+              localityGoing: obj.data().localityGoing,
+              localityLeave: obj.data().localityLeave,
+              meetingPoint: obj.data().meetingPoint,
+              minLeave: obj.data().minLeave,
+              noSeats: obj.data().noSeats,
+              phone: obj.data().phone,
+              price: obj.data().price,
+            });
           });
-        });
-    });
-    this.dialogProfileDetails.rides = rides1;
-    let rides2 = [];
-    this.dialogProfileDetails.data.myrides.forEach((item) => {
-      firebase
-        .firestore()
-        .collection("Requests")
-        .doc(item)
-        .get()
-        .then((obj) => {
-          rides2.push({
-            id: obj.id,
-            car: obj.data().car,
-            dateLeave: obj.data().dateLeave,
-            dropPoint: obj.data().dropPoint,
-            hourLeave: obj.data().hourLeave,
-            localityGoing: obj.data().localityGoing,
-            localityLeave: obj.data().localityLeave,
-            meetingPoint: obj.data().meetingPoint,
-            minLeave: obj.data().minLeave,
-            noSeats: obj.data().noSeats,
-            phone: obj.data().phone,
-            price: obj.data().price,
+      });
+      this.dialogProfileDetails.rides = rides1;
+      let rides2 = [];
+      this.dialogProfileDetails.data.myrides.forEach((item) => {
+        firebase
+          .firestore()
+          .collection("Requests")
+          .doc(item)
+          .get()
+          .then((obj) => {
+            rides2.push({
+              id: obj.id,
+              car: obj.data().car,
+              dateLeave: obj.data().dateLeave,
+              dropPoint: obj.data().dropPoint,
+              hourLeave: obj.data().hourLeave,
+              localityGoing: obj.data().localityGoing,
+              localityLeave: obj.data().localityLeave,
+              meetingPoint: obj.data().meetingPoint,
+              minLeave: obj.data().minLeave,
+              noSeats: obj.data().noSeats,
+              phone: obj.data().phone,
+              price: obj.data().price,
+            });
           });
-        });
-    });
-    this.dialogProfileDetails.myrides = rides2;
-    }
+      });
+      this.dialogProfileDetails.myrides = rides2;
+    },
   },
   created() {
-    this.dialogProfileDetails.data = localStorage.getItem("details") !== null ? JSON.parse(
-      localStorage.getItem("details")
-    ) : this.dialogProfileDetails.data;
+    this.dialogProfileDetails.data =
+      localStorage.getItem("details") !== null
+        ? JSON.parse(localStorage.getItem("details"))
+        : this.dialogProfileDetails.data;
     this.carSearchDetails.items = this.getData();
 
-if (this.dialogProfileDetails.data.username !== '') {
-    this.$store.dispatch("getUserDetails");
-    this.getUserData();
-}
+    if (this.dialogProfileDetails.data.username !== "") {
+      this.$store.dispatch("getUserDetails");
+      this.getUserData();
+    }
   },
   mounted() {
     this.maps();
@@ -1085,5 +1088,73 @@ if (this.dialogProfileDetails.data.username !== '') {
 .v-dialog {
   background-color: transparent !important;
   box-shadow: none !important;
+}
+.container-wrapper {
+  display: flex;
+  flex-flow: row;
+  height: 100vh;
+}
+.container-wrapper .left-column {
+  width: 40vw;
+}
+.container-wrapper .right-column {
+  width: 60vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: lightblue;
+}
+.container-wrapper .left-column .toolbar {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row;
+  padding: 10px 20px;
+}
+.container-wrapper .left-column .toolbar .title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.container-wrapper .left-column .filters {
+  display: flex;
+  flex-flow: wrap;
+  padding-top: 50px;
+  justify-content: center;
+  background-color: #d3d3d352;
+}
+.container-wrapper .left-column .filters .v-input {
+  margin: 10px;
+  max-width: 140px; 
+}
+.container-wrapper .left-column .results {
+  display: flex;
+  height: 100%;
+  flex-flow: column;
+  overflow-y: auto;
+}
+.container-wrapper .left-column .results .result-item {
+  background-color: white;
+  padding: 20px;
+}
+.container-wrapper .left-column .results .result-item:hover {
+  background-color: #d3d3d352;
+}
+.container-wrapper .left-column .results .result-item .location-wrapper {
+  margin: 3px;
+}
+.container-wrapper
+  .left-column
+  .results
+  .result-item
+  .location-wrapper
+  .location-locality {
+  font-weight: bold;
+}
+.container-wrapper .left-column .results .result-item .result-price {
+  opacity: 0.7;
+  margin: 3px;
+}
+.container-wrapper .left-column .results .result-item .result-item-action {
+  text-align: -webkit-right;
+  margin: 5px 10px;
 }
 </style>
