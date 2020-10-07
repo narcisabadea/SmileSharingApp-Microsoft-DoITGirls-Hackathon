@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import App from './App'
-import router from '@/router'
 import store from '@/store'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
@@ -38,7 +37,6 @@ const vuetifyInit = new Vuetify({
 
 new Vue({
   el: '#app',
-  router,
   firebase,
   store,
   vuetify : vuetifyInit,
