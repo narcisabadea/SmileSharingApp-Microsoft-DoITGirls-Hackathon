@@ -17,20 +17,19 @@
             <v-btn
               text
               @click="
-                dialogCarOfferForm.showDialog = !dialogCarOfferForm.showDialog
-              "
-              v-if="userDetails"
-            >
-              Add route
-            </v-btn>
-            <v-btn
-              text
-              @click="
                 dialogProfileDetails.showDialog = !dialogProfileDetails.showDialog
               "
               v-if="userDetails"
             >
               Account
+            </v-btn>
+            <v-btn
+              @click="
+                dialogCarOfferForm.showDialog = !dialogCarOfferForm.showDialog
+              "
+              v-if="userDetails"
+            >
+              Add route
             </v-btn>
             <v-btn text @click="logout()" v-if="userDetails">
               Log out
@@ -60,21 +59,45 @@
             :key="index"
             class="result-item"
           >
-            <div class="location-wrapper">
-              From
-              <span class="location-locality">{{ item.localityLeave }}</span>
-              ({{ item.hourLeave }}:{{ item.minLeave }}) to
-              <span class="location-locality">{{ item.localityGoing }}</span>
+            <div class="result-info">
+              <div class="result-image">
+                <img v-if="!item.car" src="../src/assets/car-icon.png" />
+                 <img v-if="item.car" :src="`../src/assets/car-logos/${item.car | lowercase}.png`" />
+              </div>
+              <div class="result-text-info">
+                <div>
+                  Date leave:
+                  <span class="bold-value"> {{ item.dateLeave }}</span>
+                </div>
+                <div>
+                  From
+                  <span class="bold-value">{{ item.localityLeave }}</span
+                  >, {{ item.meetingPoint }} ({{ item.hourLeave }}:{{
+                    item.minLeave
+                  }}) to <span class="bold-value">{{ item.localityGoing }}</span
+                  >, {{ item.dropPoint }}
+                </div>
+                <div>
+                  Seats available:
+                  <span class="bold-value">{{
+                    item.noSeats -
+                      (item.participants ? item.participants.length : 0)
+                  }}</span
+                  >/{{ item.noSeats }}
+                </div>
+                <div>
+                  Price:
+                  <span class="bold-value">{{ item.price }}</span> RON
+                </div>
+                <div>
+                  Price:
+                  <span class="bold-value">{{ item.phone }}</span>
+                </div>
+              </div>
             </div>
-            <div class="result-price">Price: {{ item.price }}RON</div>
             <div class="result-item-action">
-              <v-btn
-                depressed
-                small
-                @click="seeDetails(item.id, index)"
-                style="background: #E9C46A"
-                >See details</v-btn
-              >
+              <v-btn text @click="seeMapRoute()">View recommended route</v-btn>
+              <v-btn depressed @click="apply()">Go with this driver</v-btn>
             </div>
           </div>
         </div>
@@ -100,11 +123,7 @@
           </v-text-field>
         </v-card-text>
         <v-container grid-list-sm>
-          <v-btn
-            type="submit"
-            style="background: #0B7A75; color: white"
-            @click="login()"
-          >
+          <v-btn type="submit" @click="login()">
             Login
           </v-btn>
         </v-container>
@@ -307,10 +326,7 @@
         <!-- <v-flex>
           <div id="myMap"></div>
         </v-flex> -->
-        <v-btn
-          v-if="dialogCarOfferForm.send === false"
-          style="background: #0B7A75; color: white"
-          @click="sendRequest"
+        <v-btn v-if="dialogCarOfferForm.send === false" @click="sendRequest"
           >Post it!</v-btn
         >
         <v-card v-if="dialogCarOfferForm.send === true">
@@ -372,13 +388,9 @@
                   <v-list-tile-content>
                     <v-list-tile-title
                       >From
-                      <span style="color: #0B7A75">{{
-                        item.localityLeave
-                      }}</span>
+                      <span>{{ item.localityLeave }}</span>
                       ({{ item.hourLeave }}:{{ item.minLeave }}) to
-                      <span style="color: #0B7A75">{{
-                        item.localityGoing
-                      }}</span>
+                      <span>{{ item.localityGoing }}</span>
                     </v-list-tile-title>
                     <v-list-tile-sub-title class="text-truncate"
                       >Price: {{ item.price }}RON</v-list-tile-sub-title
@@ -387,7 +399,6 @@
                       depressed
                       small
                       @click="seeDetails(item.id, index, 'found')"
-                      style="background: #E9C46A"
                       >See details</v-btn
                     >
                     <v-divider></v-divider>
@@ -409,13 +420,9 @@
                   <v-list-tile-content>
                     <v-list-tile-title
                       >From
-                      <span style="color: #0B7A75">{{
-                        item.localityLeave
-                      }}</span>
+                      <span>{{ item.localityLeave }}</span>
                       ({{ item.hourLeave }}:{{ item.minLeave }}) to
-                      <span style="color: #0B7A75">{{
-                        item.localityGoing
-                      }}</span>
+                      <span>{{ item.localityGoing }}</span>
                     </v-list-tile-title>
                     <v-list-tile-sub-title class="text-truncate"
                       >Price: {{ item.price }}RON</v-list-tile-sub-title
@@ -424,7 +431,6 @@
                       depressed
                       small
                       @click="seeDetails(item.id, index, 'offers')"
-                      style="background: #E9C46A"
                       >See details</v-btn
                     >
                     <v-divider></v-divider>
@@ -438,7 +444,7 @@
     </v-dialog>
     <v-dialog v-model="dialogRideDetails.showDialog" max-width="80vw">
       <v-card elevation="2" shaped>
-        <v-toolbar dark style="background: #19535f">
+        <v-toolbar dark>
           <v-toolbar-title>Ride details</v-toolbar-title>
         </v-toolbar>
         <v-card-text class="text-xs-center">
@@ -522,7 +528,6 @@
         </v-card-text>
         <v-card-actions>
           <v-btn
-            style="background: #E9C46A"
             @click="add(dialogRideDetails.selectedItem.id)"
             v-if="!dialogRideDetails.send"
             >{{ userDetails ? "I'm interested" : "Login" }}</v-btn
@@ -530,9 +535,6 @@
           <v-card v-if="dialogRideDetails.send === true">
             <v-alert :value="true" type="success">Success!</v-alert>
             <v-spacer></v-spacer>
-            <v-btn to="/" flat>
-              <v-icon left>keyboard_arrow_left</v-icon>Back
-            </v-btn>
           </v-card>
         </v-card-actions>
       </v-card>
@@ -1062,6 +1064,9 @@ export default {
       });
       this.dialogProfileDetails.myrides = rides2;
     },
+    seeMapRoute() {
+      // TODO
+    },
   },
   created() {
     this.dialogProfileDetails.data =
@@ -1081,6 +1086,31 @@ export default {
 };
 </script>
 <style>
+:root {
+  --primary: #4b0082;
+  --primary-low-opacity: #4b00820d;
+  --background-light: #d3d3d336;
+  --background-white: white;
+}
+@font-face {
+  font-family: "dancingscript";
+  src: url("../src/assets/font-files/dancingscript/dancingscript-variablefont_wght-webfont.woff2")
+      format("woff2"),
+    url("../src/assets/font-files/dancingscript/dancingscript-variablefont_wght-webfont.woff")
+      format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "eliseregular";
+  src: url("../src/assets/font-files/eliseregular/elsie-regular-webfont.woff2")
+      format("woff2"),
+    url("../src/assets/font-files/eliseregular/elsie-regular-webfont.woff")
+      format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 #myMap {
   width: 100%;
   min-height: 570px;
@@ -1091,18 +1121,20 @@ export default {
 }
 .container-wrapper {
   display: flex;
+
   flex-flow: row;
   height: 100vh;
 }
 .container-wrapper .left-column {
   width: 40vw;
+  background-color: var(--background-light);
 }
 .container-wrapper .right-column {
   width: 60vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: lightblue;
+  background-color: var(--background-white);
 }
 .container-wrapper .left-column .toolbar {
   display: flex;
@@ -1112,18 +1144,32 @@ export default {
 }
 .container-wrapper .left-column .toolbar .title {
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 2.2rem !important;
+  color: var(--primary);
+  font-family: "dancingscript" !important;
 }
 .container-wrapper .left-column .filters {
   display: flex;
   flex-flow: wrap;
   padding-top: 50px;
   justify-content: center;
-  background-color: #d3d3d352;
+  background-color: var(--background-light);
 }
 .container-wrapper .left-column .filters .v-input {
   margin: 10px;
-  max-width: 140px; 
+  max-width: 140px;
+}
+.v-btn__content {
+  font-size: 0.8rem;
+  text-transform: inherit;
+}
+.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+  background-color: var(--primary) !important;
+  color: var(--background-white);
+  text-transform: capitalize;
+}
+.v-btn--flat .v-btn__content {
+  color: var(--primary);
 }
 .container-wrapper .left-column .results {
   display: flex;
@@ -1132,29 +1178,57 @@ export default {
   overflow-y: auto;
 }
 .container-wrapper .left-column .results .result-item {
-  background-color: white;
-  padding: 20px;
+  background-color: var(--background-white);
+  padding: 20px 25px;
 }
 .container-wrapper .left-column .results .result-item:hover {
-  background-color: #d3d3d352;
+  background-color: var(--primary-low-opacity);
+  border-right: 5px solid var(--primary);
+  border-left: 5px solid var(--primary);
+  padding: 20px 20px;
 }
-.container-wrapper .left-column .results .result-item .location-wrapper {
-  margin: 3px;
+.container-wrapper .left-column .results .result-item .result-info {
+  display: flex;
+  flex-flow: row;
 }
 .container-wrapper
   .left-column
   .results
   .result-item
-  .location-wrapper
-  .location-locality {
-  font-weight: bold;
+  .result-info
+  .result-image {
+  width: 70px;
+  height: 70px;
+  align-self: center;
+  text-align: center;
+  margin-right: 15px;
 }
-.container-wrapper .left-column .results .result-item .result-price {
-  opacity: 0.7;
-  margin: 3px;
+.container-wrapper
+  .left-column
+  .results
+  .result-item
+  .result-info
+  .result-image 
+  img {
+  width: 100%;
+  height: auto;
+}
+.container-wrapper
+  .left-column
+  .results
+  .result-item
+  .result-info
+  .result-text-info {
+  display: flex;
+  flex-flow: column;
+}
+.bold-value {
+  font-weight: bold;
+  font-family: "eliseregular";
+  color: var(--primary);
 }
 .container-wrapper .left-column .results .result-item .result-item-action {
   text-align: -webkit-right;
-  margin: 5px 10px;
+  padding-top: 20px;
 }
 </style>
