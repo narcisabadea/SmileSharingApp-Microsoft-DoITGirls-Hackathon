@@ -62,7 +62,8 @@
             <div class="result-info">
               <div class="result-image">
                 <img v-if="!item.car" src="../src/assets/car-icon.png" />
-                 <img v-if="item.car" :src="`../src/assets/car-logos/${item.car | lowercase}.png`" />
+                <img v-if="item.car" :src="`../src/assets/car-logos/${item.car}.png`" />
+                {{ item.car}}
               </div>
               <div class="result-text-info">
                 <div>
