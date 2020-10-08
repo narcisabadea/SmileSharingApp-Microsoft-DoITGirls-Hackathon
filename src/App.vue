@@ -140,10 +140,10 @@
                 Departure date
               </v-col>
               <v-col cols="12" sm="8">
+                <v-flex xs4 sm4 md4>
                 <v-menu
                   v-model="dialogCarOfferForm.menu1"
                   :close-on-content-click="false"
-                  :nudge-right="40"
                   :return-value.sync="dialogCarOfferForm.dateLeave"
                   transition="scale-transition"
                   offset-y
@@ -160,6 +160,7 @@
                     @input="dialogCarOfferForm.menu1 = false"
                   ></v-date-picker>
                 </v-menu>
+                </v-flex>
               </v-col>
             </v-row>
 
@@ -259,16 +260,9 @@
               </v-col>
               <v-col cols="12" sm="8">
                 <v-flex xs12 sm12 md12>
-                  <!-- <v-radio-group v-model="row" row>
-                    <v-radio label="Option 1" value="radio-1"></v-radio>
-                    <v-radio label="Option 2" value="radio-2"></v-radio>
-                  </v-radio-group> -->
-
-                  <v-select
-                    label="Select no. of seats"
-                    :items="dialogCarOfferForm.seats"
-                    v-model="dialogCarOfferForm.noSeats"
-                  ></v-select>
+                  <v-radio-group v-model="dialogCarOfferForm.noSeats" row>
+                    <v-radio  v-for='n in 5' :key ='n' :label="`${n}`" :value="n"></v-radio>
+                  </v-radio-group>
                 </v-flex>
               </v-col>
             </v-row>
@@ -321,13 +315,8 @@
               </v-col>
             </v-row>
           </v-card-text>
-        </v-card>
-      </v-container>
-      <v-container grid-list-sm>
-        <!-- <v-flex>
-          <div id="myMap"></div>
-        </v-flex> -->
-        <v-btn v-if="dialogCarOfferForm.send === false" @click="sendRequest"
+
+           <v-btn v-if="dialogCarOfferForm.send === false" @click="sendRequest" class="postButton"
           >Post it!</v-btn
         >
         <v-card v-if="dialogCarOfferForm.send === true">
@@ -335,6 +324,14 @@
           <v-spacer></v-spacer>
           <v-btn to="/"> <v-icon left>keyboard_arrow_left</v-icon>Back </v-btn>
         </v-card>
+        </v-card>
+        
+      </v-container>
+      <v-container grid-list-sm>
+        <v-flex>
+          <div id="myMap"></div>
+        </v-flex>
+       
       </v-container>
     </v-dialog>
     <v-dialog v-model="dialogProfileDetails.showDialog" max-width="80vw">
@@ -1231,5 +1228,9 @@ export default {
 .container-wrapper .left-column .results .result-item .result-item-action {
   text-align: -webkit-right;
   padding-top: 20px;
+}
+.postButton {
+  margin-left: 50px;
+  margin-bottom: 30px;
 }
 </style>
