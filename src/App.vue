@@ -62,8 +62,7 @@
             <div class="result-info">
               <div class="result-image">
                 <img v-if="!item.car" src="../src/assets/car-icon.png" />
-                <img v-if="item.car" :src="`../src/assets/car-logos/${item.car}.png`" />
-                {{ item.car}}
+                <img v-if="item.car" v-bind:src="require(`../src/assets/car-logos/${item.car}.png`)" />
               </div>
               <div class="result-text-info">
                 <div>
