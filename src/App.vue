@@ -62,7 +62,12 @@
             <div class="result-info">
               <div class="result-image">
                 <img v-if="!item.car" src="../src/assets/car-icon.png" />
-                <img v-if="item.car" v-bind:src="require(`../src/assets/car-logos/${item.car}.png`)" />
+                <img v-if="item.car === 'bmw'" src="../src/assets/car-logos/bmw.png" />
+                <img v-if="item.car === 'fiat'" src="../src/assets/car-logos/fiat.png" />
+                <img v-if="item.car === 'ford'" src="../src/assets/car-logos/ford.png" />
+                <img v-if="item.car === 'matiz'" src="../src/assets/car-logos/matiz.png" />
+                <img v-if="item.car === 'opel'" src="../src/assets/car-logos/opel.png" />
+                <img v-if="item.car === 'volswagen'" src="../src/assets/car-logos/volswagen.png" />
               </div>
               <div class="result-text-info">
                 <div>
