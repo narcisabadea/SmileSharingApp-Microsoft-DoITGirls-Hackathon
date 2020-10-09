@@ -36,6 +36,7 @@
             </v-btn>
           </div>
         </div>
+        <div clas="bottom-part">
         <div class="filters">
           <v-autocomplete
             :items="localityLeaveFilter"
@@ -171,6 +172,7 @@
               >
             </div>
           </div>
+        </div>
         </div>
       </div>
       <div class="right-column">
@@ -1090,6 +1092,9 @@ export default {
 .container-wrapper .left-column {
   width: 40vw;
   background-color: var(--background-light);
+      display: flex;
+    flex-flow: column;
+    justify-content: space-between;
 }
 .container-wrapper .right-column {
   width: 60vw;
@@ -1100,8 +1105,12 @@ export default {
 }
 .container-wrapper .left-column .toolbar {
   display: flex;
+  background: url('./assets/banner.png');
+  background-size: cover;
+    background-position: bottom;
   justify-content: space-between;
   flex-flow: row;
+      height: 100%;
   padding: 10px 20px;
 }
 .container-wrapper .left-column .toolbar .title {
@@ -1113,7 +1122,7 @@ export default {
 .container-wrapper .left-column .filters {
   display: flex;
   flex-flow: wrap;
-  padding-top: 50px;
+      padding-top: 15px;
   justify-content: center;
   background-color: var(--background-light);
 }
@@ -1157,9 +1166,10 @@ export default {
 }
 .container-wrapper .left-column .results {
   display: flex;
-  height: 100%;
-  flex-flow: column;
-  overflow-y: auto;
+    height: -webkit-fill-available;
+    flex-flow: column;
+    overflow-y: auto;
+    max-height: 55vh;
 }
 .container-wrapper .left-column .results .result-item {
   background-color: var(--background-white);
@@ -1197,6 +1207,9 @@ export default {
   width: 100%;
   height: auto;
 }
+.bottom-part {
+  height: 100%;
+}
 .container-wrapper
   .left-column
   .results
@@ -1215,6 +1228,7 @@ export default {
   padding-top: 20px;
   display: flex;
   justify-content: space-between;
+  flex-flow: wrap;
 }
 .postButton {
   margin-left: 50px;
