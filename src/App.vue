@@ -158,7 +158,7 @@
               </div>
             </div>
             <div class="result-item-action">
-              <v-btn text @click="seeMapRoute()">View recommended route</v-btn>
+              <v-btn text @click="seeMapRoute(item)">View recommended route</v-btn>
               <v-btn
                 :disabled="userParticipate(item)"
                 depressed
@@ -174,7 +174,9 @@
         </div>
       </div>
       <div class="right-column">
-        map
+        <div class="error-route" v-if="showRouteError && !showInformationalText">Error in loading map. Please select another course, this one seems to not have all the informations filled.</div>
+        <div v-if="showInformationalText && !showRouteError" class="information-text">Select a result to see the recommended route. This can depend on the driver, please get in touch.</div>
+        <div id="map"></div>
       </div>
     </div>
     <v-dialog v-model="dialogLoginForm.showDialog" max-width="80vw">
@@ -713,6 +715,14 @@ export default {
         selectedlocalityGoing: "All locations",
         selectedcarType: "All types",
       },
+      showInformationalText: true,
+      showRouteError: false,
+      directions: {
+          service: null,
+          display: null,
+          start: null,
+          end: null
+        }
     };
   },
   components: { VueGoogleAutocomplete },
@@ -848,9 +858,14 @@ export default {
         this.loginDialog = true;
       }
     },
-    createMapOnLoad() {
+    seeMapRoute(item) {
+      this.showInformationalText = false;
+      var map = document.getElementById("map");
+      if (item && item.startLatitude && item.startLongitude && item.finishLatitude && item.finishLongitude) {
+        this.showRouteError = false;
+        map.style.display = "unset";
       this.dialogCarOfferForm.map = new window.google.maps.Map(
-        document.getElementById("map"),
+        map,
         {
           center: {
             lat: +this.filteredItems[0].startLatitude,
@@ -871,11 +886,25 @@ export default {
         this.filteredItems[0].finishLongitude
       );
       this.directions.display.setMap(this.dialogCarOfferForm.map);
-      this.renderDirections();
-      try {
-        this.mapPins();
-      } catch (e) {
-        //
+      
+      // render directions
+        if (this.directions.service) {
+          const request = {
+            origin: this.directions.start,
+            destination: this.directions.end,
+            travelMode: 'DRIVING'
+          }
+          this.directions.service.route(request, (response, status) => {
+            if (status === 'OK') {
+              this.directions.display.setDirections(response)
+            } else {
+              console.warn('Directions request failed due to ' + status)
+            }
+          })
+        }
+      } else {
+        this.showRouteError = true;
+        map.style.display = "none";
       }
     },
     seeDetails(id, index, type) {
@@ -993,9 +1022,6 @@ export default {
       });
       this.dialogProfileDetails.myrides = rides2;
     },
-    seeMapRoute() {
-      // TODO
-    },
   },
   created() {
     this.dialogProfileDetails.data =
@@ -1009,9 +1035,6 @@ export default {
     }
 
     this.$store.dispatch("getRequestsData");
-  },
-  mounted() {
-    this.createMapOnLoad();
   },
 };
 </script>
@@ -1049,9 +1072,10 @@ export default {
   font-weight: normal;
   font-style: normal;
 }
-#myMap {
-  width: 100%;
-  min-height: 570px;
+#map {
+    height: 100%;
+    width: 100%;
+    display: none;
 }
 .v-dialog {
   background-color: transparent !important;
@@ -1111,6 +1135,17 @@ export default {
 }
 .mdi-menu-down::before {
   color: var(--primary) !important;
+}
+.information-text {
+      margin: 0 20%;
+    text-align: center;
+    opacity: 0.3;
+}
+.error-route {
+  margin: 0 20%;
+    text-align: center;
+    opacity: 0.3;
+    color: red;
 }
 .theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
   background-color: var(--primary) !important;

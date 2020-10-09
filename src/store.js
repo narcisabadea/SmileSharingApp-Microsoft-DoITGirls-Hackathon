@@ -72,7 +72,11 @@ export default new Vuex.Store({
               noSeats: obj.data().noSeats,
               phone: obj.data().phone,
               price: obj.data().price,
-              participants: obj.data().participants,
+              startLatitude: obj.data().startLatitude,
+              startLongitude: obj.data().startLongitude,
+              finishLatitude: obj.data().finishLatitude,
+              finishLongitude: obj.data().finishLongitude,
+              participants: obj.data().participants
             });
           });
           commit("setRequestsData", items);
