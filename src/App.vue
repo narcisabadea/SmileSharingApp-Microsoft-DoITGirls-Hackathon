@@ -47,11 +47,22 @@
             label="Locality going"
             v-model="carSearchDetails.selectedlocalityGoing"
           ></v-autocomplete>
-          <v-autocomplete
-            :items="carTypeFilter"
-            label="Select car"
-            v-model="carSearchDetails.selectedcarType"
-          ></v-autocomplete>
+              <v-select
+      v-model="carSearchDetails.selectedcarType"
+      :items="carTypeFilter"
+      label="Select car"
+    >
+      <template v-slot:item="slotProps">
+        <img class="filter-image" v-if="slotProps.item === 'All types'" src="../src/assets/car-icon.png" />
+        <img class="filter-image" v-if="slotProps.item === 'bmw'" src="../src/assets/car-logos/bmw.png" />
+        <img class="filter-image" v-if="slotProps.item === 'fiat'" src="../src/assets/car-logos/fiat.png" />
+        <img class="filter-image" v-if="slotProps.item === 'ford'" src="../src/assets/car-logos/ford.png" />
+        <img class="filter-image" v-if="slotProps.item === 'matiz'" src="../src/assets/car-logos/matiz.png" />
+        <img class="filter-image" v-if="slotProps.item === 'opel'" src="../src/assets/car-logos/opel.png" />
+        <img class="filter-image" v-if="slotProps.item === 'volswagen'" src="../src/assets/car-logos/volswagen.png" />
+        {{slotProps.item}}
+      </template>
+     </v-select>
         </div>
         <div class="results">
           <div
@@ -333,7 +344,7 @@
       </v-container>
       <v-container grid-list-sm>
         <v-flex>
-          <div id="myMap"></div>
+          <div id="map"></div>
         </v-flex>
        
       </v-container>
@@ -706,7 +717,6 @@ export default {
       this.dialogCarOfferForm.startLatitude = addressData.latitude;
       this.dialogCarOfferForm.startLongitude = addressData.longitude;
       this.dialogCarOfferForm.localityLeave = addressData.locality;
-      this.maps();
     },
     getAddressDataFinish(addressData, placeResultData, id) {
       console.warn("getAddressDataFinish", {
@@ -772,170 +782,23 @@ export default {
         this.loginDialog = true;
       }
     },
-    maps() {
-      this.dialogCarOfferForm.map = new window.atlas.Map("myMap", {
-        zoom: 12,
-        center:
-          this.dialogCarOfferForm.startLatitude &&
-          this.dialogCarOfferForm.startLongitude
-            ? [
-                +this.dialogCarOfferForm.startLongitude,
-                +this.dialogCarOfferForm.startLatitude,
-              ]
-            : this.dialogCarOfferForm.finishLatitude &&
-              this.dialogCarOfferForm.finishLongitude
-            ? [
-                +this.dialogCarOfferForm.finishLongitude,
-                +this.dialogCarOfferForm.finishLatitude,
-              ]
-            : [+26.10025, +44.4271325],
-        authOptions: {
-          authType: "subscriptionKey",
-          subscriptionKey: "ifkDxBr3Dh85OBBgiv5qg9IcQiCcjs4vRkIUQJO2t1c",
-        },
-      });
-      this.dialogCarOfferForm.map.events.add("ready", () => {
-        //Create a HTML marker and add it to the map.
-        if (
-          this.dialogCarOfferForm.startLatitude &&
-          this.dialogCarOfferForm.startLongitude &&
-          this.dialogCarOfferForm.finishLatitude &&
-          this.dialogCarOfferForm.finishLongitude
-        ) {
-          this.route();
-        } else if (
-          this.dialogCarOfferForm.startLatitude &&
-          this.dialogCarOfferForm.startLongitude
-        ) {
-          console.log(
-            this.dialogCarOfferForm.startLatitude,
-            this.dialogCarOfferForm.startLongitude
-          );
-          var marker = new window.atlas.HtmlMarker({
-            color: "DodgerBlue",
-            text: "0",
-            position: [
-              +this.dialogCarOfferForm.startLongitude,
-              +this.dialogCarOfferForm.startLatitude,
-            ],
-            popup: new window.atlas.Popup({
-              content: '<div style="padding:10px">Start</div>',
-              pixelOffset: [0, -30],
-            }),
-          });
-          this.dialogCarOfferForm.map.markers.add(marker);
-          //Add a click event to toggle the popup.
-          this.dialogCarOfferForm.map.events.add("click", marker, () => {
-            marker.togglePopup();
-          });
-        } else if (
-          this.dialogCarOfferForm.finishLatitude &&
-          this.dialogCarOfferForm.finishLongitude
-        ) {
-          console.log(
-            this.dialogCarOfferForm.finishLatitude,
-            this.dialogCarOfferForm.finishLongitude
-          );
-          var marker2 = new window.atlas.HtmlMarker({
-            color: "DodgerBlue",
-            text: "0",
-            position: [
-              +this.dialogCarOfferForm.finishLongitude,
-              +this.dialogCarOfferForm.finishLatitude,
-            ],
-            popup: new window.atlas.Popup({
-              content: '<div style="padding:10px">Start</div>',
-              pixelOffset: [0, -30],
-            }),
-          });
-          this.dialogCarOfferForm.map.markers.add(marker2);
-          //Add a click event to toggle the popup.
-          this.dialogCarOfferForm.map.events.add("click", marker2, () => {
-            marker2.togglePopup();
-          });
-        }
-      });
-    },
-    route() {
-      var datasource = new window.atlas.source.DataSource();
-      this.dialogCarOfferForm.map.sources.add(datasource);
-      this.dialogCarOfferForm.map.layers.add(
-        new window.atlas.layer.LineLayer(datasource, null, {
-          strokeColor: "#2272B9",
-          strokeWidth: 5,
-          lineJoin: "round",
-          lineCap: "round",
-          filter: ["==", "$type", "LineString"],
-        }),
-        "labels"
-      );
-      //Add a layer for rendering point data.
-      this.dialogCarOfferForm.map.layers.add(
-        new window.atlas.layer.SymbolLayer(datasource, null, {
-          iconOptions: {
-            image: ["get", "icon"],
-            allowOverlap: true,
-          },
-          textOptions: {
-            textField: ["get", "title"],
-            offset: [0, 1.2],
-          },
-          filter: ["==", "$type", "Point"],
-        })
-      );
-      var startPoint = new window.atlas.data.Feature(
-        new window.atlas.data.Point([
-          +this.dialogCarOfferForm.startLongitude,
-          +this.dialogCarOfferForm.startLatitude,
-        ]),
-        {
-          title: "Start",
-          icon: "pin-blue",
-        }
-      );
-      var endPoint = new window.atlas.data.Feature(
-        new window.atlas.data.Point([
-          +this.dialogCarOfferForm.finishLongitude,
-          +this.dialogCarOfferForm.finishLatitude,
-        ]),
-        {
-          title: "End",
-          icon: "pin-round-blue",
-        }
-      );
-      //Add the data to the data source.
-      datasource.add([startPoint, endPoint]);
-      this.dialogCarOfferForm.map.setCamera({
-        bounds: window.atlas.data.BoundingBox.fromData([startPoint, endPoint]),
-        padding: 80,
-      });
-      var subscriptionKeyCredential = new window.atlas.service.SubscriptionKeyCredential(
-        window.atlas.getSubscriptionKey()
-      );
-      var pipeline = window.atlas.service.MapsURL.newPipeline(
-        subscriptionKeyCredential
-      );
-      var routeURL = new window.atlas.service.RouteURL(pipeline);
-      //Start and end point input to the routeURL
-      var coordinates = [
-        [
-          startPoint.geometry.coordinates[0],
-          startPoint.geometry.coordinates[1],
-        ],
-        [endPoint.geometry.coordinates[0], endPoint.geometry.coordinates[1]],
-      ];
-
-      //Make a search route request
-      routeURL
-        .calculateRouteDirections(
-          window.atlas.service.Aborter.timeout(10000),
-          coordinates
-        )
-        .then((directions) => {
-          //Get data features from response
-          var data = directions.geojson.getFeatures();
-          datasource.add(data);
-        });
+    createMapOnLoad() {
+      this.dialogCarOfferForm.map = new window.google.maps.Map(document.getElementById('map'), {
+        center: {lat: +this.filteredItems[0].startLatitude, lng: +this.filteredItems[0].startLongitude},
+        zoom: 16
+      })
+      // DIRECTIONS
+      this.directions.service = new window.google.maps.DirectionsService
+      this.directions.display = new window.google.maps.DirectionsRenderer
+      this.directions.start = new window.google.maps.LatLng(this.filteredItems[0].startLatitude, this.filteredItems[0].startLongitude)
+      this.directions.end = new window.google.maps.LatLng(this.filteredItems[0].finishLatitude, this.filteredItems[0].finishLongitude)
+      this.directions.display.setMap(this.dialogCarOfferForm.map)
+      this.renderDirections()
+      try {
+        this.mapPins()
+      } catch (e) {
+        //
+      }
     },
     seeDetails(id, index, type) {
       this.dialogRideDetails.showDialog = true;
@@ -1070,7 +933,7 @@ export default {
     this.$store.dispatch('getRequestsData');
   },
   mounted() {
-    this.maps();
+    this.createMapOnLoad();
   },
 };
 </script>
@@ -1159,6 +1022,11 @@ export default {
 .v-btn__content {
   font-size: 0.8rem;
   text-transform: inherit;
+}
+.filter-image {
+      width: 25px;
+    height: 25px;
+    margin-right: 5px;
 }
 .theme--light.v-text-field>.v-input__control>.v-input__slot:before {
   border-color: var(--primary) !important;
