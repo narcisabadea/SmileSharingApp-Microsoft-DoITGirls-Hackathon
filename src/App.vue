@@ -1231,8 +1231,9 @@ export default {
   color: var(--primary);
 }
 .container-wrapper .left-column .results .result-item .result-item-action {
-  text-align: -webkit-right;
-  padding-top: 20px;
+      padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
 }
 .postButton {
   margin-left: 50px;
