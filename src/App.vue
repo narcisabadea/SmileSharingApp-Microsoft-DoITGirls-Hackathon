@@ -102,7 +102,8 @@
             </div>
             <div class="result-item-action">
               <v-btn text @click="seeMapRoute()">View recommended route</v-btn>
-              <v-btn depressed @click="apply()">Go with this driver</v-btn>
+              <v-btn v-if="!userParticipate(item)" depressed @click="apply(item)">Go with this driver</v-btn>
+              <v-btn v-if="userParticipate(item)" disabled depressed>Already participating</v-btn>
             </div>
           </div>
         </div>
@@ -977,16 +978,25 @@ export default {
         });
       return items;
     },
-    add(id) {
+    userParticipate(ride) {
+      return ride.participants ? ride.participants.includes(this.userDetails.username) : false;
+    },
+    apply(ride) {
       if (this.userDetails) {
-        let newRides = this.userDetails.rides;
-        newRides.push(id);
+        let newRides = [...this.userDetails.rides, ride.id];
         firebase
           .firestore()
           .collection("Users/")
           .doc(this.userDetails.username)
           .update({
             rides: newRides,
+          });
+          firebase
+          .firestore()
+          .collection("Requests/")
+          .doc(ride.id)
+          .update({
+            participants: [...ride.participants, this.userDetails.username],
           });
         this.send = true;
       } else {
@@ -1112,7 +1122,15 @@ export default {
   font-weight: normal;
   font-style: normal;
 }
-
+@font-face {
+  font-family: "robotoregular";
+  src: url("../src/assets/font-files/robotoregular/roboto-regular-webfont.woff2")
+      format("woff2"),
+    url("../src/assets/font-files/robotoregular/roboto-regular-webfont.woff")
+      format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 #myMap {
   width: 100%;
   min-height: 570px;
@@ -1226,7 +1244,7 @@ export default {
 }
 .bold-value {
   font-weight: bold;
-  font-family: "eliseregular";
+  font-family: "robotoregular";
   color: var(--primary);
 }
 .container-wrapper .left-column .results .result-item .result-item-action {
