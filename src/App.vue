@@ -47,22 +47,50 @@
             label="Locality going"
             v-model="carSearchDetails.selectedlocalityGoing"
           ></v-autocomplete>
-              <v-select
-      v-model="carSearchDetails.selectedcarType"
-      :items="carTypeFilter"
-      label="Select car"
-    >
-      <template v-slot:item="slotProps">
-        <img class="filter-image" v-if="slotProps.item === 'All types'" src="../src/assets/car-icon.png" />
-        <img class="filter-image" v-if="slotProps.item === 'bmw'" src="../src/assets/car-logos/bmw.png" />
-        <img class="filter-image" v-if="slotProps.item === 'fiat'" src="../src/assets/car-logos/fiat.png" />
-        <img class="filter-image" v-if="slotProps.item === 'ford'" src="../src/assets/car-logos/ford.png" />
-        <img class="filter-image" v-if="slotProps.item === 'matiz'" src="../src/assets/car-logos/matiz.png" />
-        <img class="filter-image" v-if="slotProps.item === 'opel'" src="../src/assets/car-logos/opel.png" />
-        <img class="filter-image" v-if="slotProps.item === 'volswagen'" src="../src/assets/car-logos/volswagen.png" />
-        {{slotProps.item}}
-      </template>
-     </v-select>
+          <v-select
+            v-model="carSearchDetails.selectedcarType"
+            :items="carTypeFilter"
+            label="Select car"
+          >
+            <template v-slot:item="slotProps">
+              <img
+                class="filter-image"
+                v-if="slotProps.item === 'All types'"
+                src="../src/assets/car-icon.png"
+              />
+              <img
+                class="filter-image"
+                v-if="slotProps.item === 'bmw'"
+                src="../src/assets/car-logos/bmw.png"
+              />
+              <img
+                class="filter-image"
+                v-if="slotProps.item === 'fiat'"
+                src="../src/assets/car-logos/fiat.png"
+              />
+              <img
+                class="filter-image"
+                v-if="slotProps.item === 'ford'"
+                src="../src/assets/car-logos/ford.png"
+              />
+              <img
+                class="filter-image"
+                v-if="slotProps.item === 'matiz'"
+                src="../src/assets/car-logos/matiz.png"
+              />
+              <img
+                class="filter-image"
+                v-if="slotProps.item === 'opel'"
+                src="../src/assets/car-logos/opel.png"
+              />
+              <img
+                class="filter-image"
+                v-if="slotProps.item === 'volkswagen'"
+                src="../src/assets/car-logos/volkswagen.png"
+              />
+              {{ slotProps.item }}
+            </template>
+          </v-select>
         </div>
         <div class="results">
           <div
@@ -73,12 +101,30 @@
             <div class="result-info">
               <div class="result-image">
                 <img v-if="!item.car" src="../src/assets/car-icon.png" />
-                <img v-if="item.car === 'bmw'" src="../src/assets/car-logos/bmw.png" />
-                <img v-if="item.car === 'fiat'" src="../src/assets/car-logos/fiat.png" />
-                <img v-if="item.car === 'ford'" src="../src/assets/car-logos/ford.png" />
-                <img v-if="item.car === 'matiz'" src="../src/assets/car-logos/matiz.png" />
-                <img v-if="item.car === 'opel'" src="../src/assets/car-logos/opel.png" />
-                <img v-if="item.car === 'volswagen'" src="../src/assets/car-logos/volswagen.png" />
+                <img
+                  v-if="item.car === 'bmw'"
+                  src="../src/assets/car-logos/bmw.png"
+                />
+                <img
+                  v-if="item.car === 'fiat'"
+                  src="../src/assets/car-logos/fiat.png"
+                />
+                <img
+                  v-if="item.car === 'ford'"
+                  src="../src/assets/car-logos/ford.png"
+                />
+                <img
+                  v-if="item.car === 'matiz'"
+                  src="../src/assets/car-logos/matiz.png"
+                />
+                <img
+                  v-if="item.car === 'opel'"
+                  src="../src/assets/car-logos/opel.png"
+                />
+                <img
+                  v-if="item.car === 'volkswagen'"
+                  src="../src/assets/car-logos/volkswagen.png"
+                />
               </div>
               <div class="result-text-info">
                 <div>
@@ -113,7 +159,16 @@
             </div>
             <div class="result-item-action">
               <v-btn text @click="seeMapRoute()">View recommended route</v-btn>
-              <v-btn :disabled="userParticipate(item)" depressed @click="apply(item)">{{ userParticipate(item) ? 'Participating' : 'Go with this driver' }}</v-btn>
+              <v-btn
+                :disabled="userParticipate(item)"
+                depressed
+                @click="apply(item)"
+                >{{
+                  userParticipate(item)
+                    ? "Participating"
+                    : "Go with this driver"
+                }}</v-btn
+              >
             </div>
           </div>
         </div>
@@ -156,25 +211,25 @@
               </v-col>
               <v-col cols="12" sm="8">
                 <v-flex xs4 sm4 md4>
-                <v-menu
-                  v-model="dialogCarOfferForm.menu1"
-                  :close-on-content-click="false"
-                  :return-value.sync="dialogCarOfferForm.dateLeave"
-                  transition="scale-transition"
-                  offset-y
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
+                  <v-menu
+                    v-model="dialogCarOfferForm.menu1"
+                    :close-on-content-click="false"
+                    :return-value.sync="dialogCarOfferForm.dateLeave"
+                    transition="scale-transition"
+                    offset-y
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="dialogCarOfferForm.date"
+                        readonly
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
                       v-model="dialogCarOfferForm.date"
-                      readonly
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="dialogCarOfferForm.date"
-                    @input="dialogCarOfferForm.menu1 = false"
-                  ></v-date-picker>
-                </v-menu>
+                      @input="dialogCarOfferForm.menu1 = false"
+                    ></v-date-picker>
+                  </v-menu>
                 </v-flex>
               </v-col>
             </v-row>
@@ -276,7 +331,12 @@
               <v-col cols="12" sm="8">
                 <v-flex xs12 sm12 md12>
                   <v-radio-group v-model="dialogCarOfferForm.noSeats" row>
-                    <v-radio  v-for='n in 5' :key ='n' :label="`${n}`" :value="n"></v-radio>
+                    <v-radio
+                      v-for="n in 5"
+                      :key="n"
+                      :label="`${n}`"
+                      :value="n"
+                    ></v-radio>
                   </v-radio-group>
                 </v-flex>
               </v-col>
@@ -331,22 +391,25 @@
             </v-row>
           </v-card-text>
 
-           <v-btn v-if="dialogCarOfferForm.send === false" @click="sendRequest" class="postButton"
-          >Post it!</v-btn
-        >
-        <v-card v-if="dialogCarOfferForm.send === true">
-          <v-alert :value="true" type="success">Success!</v-alert>
-          <v-spacer></v-spacer>
-          <v-btn to="/"> <v-icon left>keyboard_arrow_left</v-icon>Back </v-btn>
+          <v-btn
+            v-if="dialogCarOfferForm.send === false"
+            @click="sendRequest"
+            class="postButton"
+            >Post it!</v-btn
+          >
+          <v-card v-if="dialogCarOfferForm.send === true">
+            <v-alert :value="true" type="success">Success!</v-alert>
+            <v-spacer></v-spacer>
+            <v-btn to="/">
+              <v-icon left>keyboard_arrow_left</v-icon>Back
+            </v-btn>
+          </v-card>
         </v-card>
-        </v-card>
-        
       </v-container>
       <v-container grid-list-sm>
         <v-flex>
           <div id="map"></div>
         </v-flex>
-       
       </v-container>
     </v-dialog>
     <v-dialog v-model="dialogProfileDetails.showDialog" max-width="80vw">
@@ -661,7 +724,8 @@ export default {
       return this.$store.getters.requestsDetails;
     },
     filteredItems() {
-      return  this.requestsDetails.filter((item) => {
+      return this.requestsDetails
+        .filter((item) => {
           return this.carSearchDetails.selectedLocalityLeave === "All locations"
             ? true
             : item.localityLeave ===
@@ -696,7 +760,9 @@ export default {
     carTypeFilter() {
       let carTypeData = ["All types"];
       this.requestsDetails.forEach((item) => {
-        carTypeData.push(item.car);
+        if (item.car) {
+          carTypeData.push(item.car);
+        }
       });
       return carTypeData;
     },
@@ -783,19 +849,31 @@ export default {
       }
     },
     createMapOnLoad() {
-      this.dialogCarOfferForm.map = new window.google.maps.Map(document.getElementById('map'), {
-        center: {lat: +this.filteredItems[0].startLatitude, lng: +this.filteredItems[0].startLongitude},
-        zoom: 16
-      })
+      this.dialogCarOfferForm.map = new window.google.maps.Map(
+        document.getElementById("map"),
+        {
+          center: {
+            lat: +this.filteredItems[0].startLatitude,
+            lng: +this.filteredItems[0].startLongitude,
+          },
+          zoom: 16,
+        }
+      );
       // DIRECTIONS
-      this.directions.service = new window.google.maps.DirectionsService
-      this.directions.display = new window.google.maps.DirectionsRenderer
-      this.directions.start = new window.google.maps.LatLng(this.filteredItems[0].startLatitude, this.filteredItems[0].startLongitude)
-      this.directions.end = new window.google.maps.LatLng(this.filteredItems[0].finishLatitude, this.filteredItems[0].finishLongitude)
-      this.directions.display.setMap(this.dialogCarOfferForm.map)
-      this.renderDirections()
+      this.directions.service = new window.google.maps.DirectionsService();
+      this.directions.display = new window.google.maps.DirectionsRenderer();
+      this.directions.start = new window.google.maps.LatLng(
+        this.filteredItems[0].startLatitude,
+        this.filteredItems[0].startLongitude
+      );
+      this.directions.end = new window.google.maps.LatLng(
+        this.filteredItems[0].finishLatitude,
+        this.filteredItems[0].finishLongitude
+      );
+      this.directions.display.setMap(this.dialogCarOfferForm.map);
+      this.renderDirections();
       try {
-        this.mapPins()
+        this.mapPins();
       } catch (e) {
         //
       }
@@ -811,13 +889,13 @@ export default {
           index
         ];
       } else if (type === "offer") {
-        this.dialogRideDetails.selectedItem = this.requestsDetails[
-          index
-        ];
+        this.dialogRideDetails.selectedItem = this.requestsDetails[index];
       }
     },
     userParticipate(ride) {
-      return ride.participants ? ride.participants.includes(this.userDetails.username) : false;
+      return ride.participants
+        ? ride.participants.includes(this.userDetails.username)
+        : false;
     },
     apply(ride) {
       if (this.userDetails) {
@@ -827,10 +905,10 @@ export default {
           .collection("Users/")
           .doc(this.userDetails.username)
           .update({
-            rides: [ ...newRides, ride.id],
+            rides: [...newRides, ride.id],
           });
-          const newParticipants = ride.participants ? ride.participants : [];
-          firebase
+        const newParticipants = ride.participants ? ride.participants : [];
+        firebase
           .firestore()
           .collection("Requests/")
           .doc(ride.id)
@@ -930,7 +1008,7 @@ export default {
       this.getUserData();
     }
 
-    this.$store.dispatch('getRequestsData');
+    this.$store.dispatch("getRequestsData");
   },
   mounted() {
     this.createMapOnLoad();
@@ -1024,11 +1102,11 @@ export default {
   text-transform: inherit;
 }
 .filter-image {
-      width: 25px;
-    height: 25px;
-    margin-right: 5px;
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
 }
-.theme--light.v-text-field>.v-input__control>.v-input__slot:before {
+.theme--light.v-text-field > .v-input__control > .v-input__slot:before {
   border-color: var(--primary) !important;
 }
 .mdi-menu-down::before {
@@ -1079,7 +1157,7 @@ export default {
   .results
   .result-item
   .result-info
-  .result-image 
+  .result-image
   img {
   width: 100%;
   height: auto;
@@ -1099,9 +1177,9 @@ export default {
   color: var(--primary);
 }
 .container-wrapper .left-column .results .result-item .result-item-action {
-      padding-top: 20px;
-    display: flex;
-    justify-content: space-between;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 .postButton {
   margin-left: 50px;
