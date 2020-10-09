@@ -102,8 +102,7 @@
             </div>
             <div class="result-item-action">
               <v-btn text @click="seeMapRoute()">View recommended route</v-btn>
-              <v-btn v-if="!userParticipate(item)" depressed @click="apply(item)">Go with this driver</v-btn>
-              <v-btn v-if="userParticipate(item)" disabled depressed>Already participating</v-btn>
+              <v-btn :disabled="userParticipate(item)" depressed @click="apply(item)">{{ userParticipate(item) ? 'Participating' : 'Go with this driver' }}</v-btn>
             </div>
           </div>
         </div>
@@ -647,9 +646,11 @@ export default {
     userDetails() {
       return this.$store.getters.userDetails;
     },
+    requestsDetails() {
+      return this.$store.getters.requestsDetails;
+    },
     filteredItems() {
-      return this.carSearchDetails.items
-        .filter((item) => {
+      return  this.requestsDetails.filter((item) => {
           return this.carSearchDetails.selectedLocalityLeave === "All locations"
             ? true
             : item.localityLeave ===
@@ -669,21 +670,21 @@ export default {
     },
     localityLeaveFilter() {
       let localityLeaveFilterData = ["All locations"];
-      this.carSearchDetails.items.forEach((item) => {
+      this.requestsDetails.forEach((item) => {
         localityLeaveFilterData.push(item.localityLeave);
       });
       return localityLeaveFilterData;
     },
     localityGoingFilter() {
       let localityGoingFilterData = ["All locations"];
-      this.carSearchDetails.items.forEach((item) => {
+      this.requestsDetails.forEach((item) => {
         localityGoingFilterData.push(item.localityGoing);
       });
       return localityGoingFilterData;
     },
     carTypeFilter() {
       let carTypeData = ["All types"];
-      this.carSearchDetails.items.forEach((item) => {
+      this.requestsDetails.forEach((item) => {
         carTypeData.push(item.car);
       });
       return carTypeData;
@@ -947,56 +948,31 @@ export default {
           index
         ];
       } else if (type === "offer") {
-        this.dialogRideDetails.selectedItem = this.carSearchDetails.items[
+        this.dialogRideDetails.selectedItem = this.requestsDetails[
           index
         ];
       }
-    },
-    getData() {
-      let items = [];
-      firebase
-        .firestore()
-        .collection("Requests")
-        .onSnapshot((snapshot) => {
-          snapshot.forEach((obj) => {
-            items.push({
-              id: obj.id,
-              car: obj.data().car,
-              dateLeave: obj.data().dateLeave,
-              dropPoint: obj.data().dropPoint,
-              hourLeave: obj.data().hourLeave,
-              localityGoing: obj.data().localityGoing,
-              localityLeave: obj.data().localityLeave,
-              meetingPoint: obj.data().meetingPoint,
-              minLeave: obj.data().minLeave,
-              noSeats: obj.data().noSeats,
-              phone: obj.data().phone,
-              price: obj.data().price,
-              participants: obj.data().participants,
-            });
-          });
-        });
-      return items;
     },
     userParticipate(ride) {
       return ride.participants ? ride.participants.includes(this.userDetails.username) : false;
     },
     apply(ride) {
       if (this.userDetails) {
-        let newRides = [...this.userDetails.rides, ride.id];
+        const newRides = this.userDetails.rides ? this.userDetails.rides : [];
         firebase
           .firestore()
           .collection("Users/")
           .doc(this.userDetails.username)
           .update({
-            rides: newRides,
+            rides: [ ...newRides, ride.id],
           });
+          const newParticipants = ride.participants ? ride.participants : [];
           firebase
           .firestore()
           .collection("Requests/")
           .doc(ride.id)
           .update({
-            participants: [...ride.participants, this.userDetails.username],
+            participants: [...newParticipants, this.userDetails.username],
           });
         this.send = true;
       } else {
@@ -1085,12 +1061,13 @@ export default {
       localStorage.getItem("details") !== null
         ? JSON.parse(localStorage.getItem("details"))
         : this.dialogProfileDetails.data;
-    this.carSearchDetails.items = this.getData();
 
     if (this.dialogProfileDetails.data.username !== "") {
       this.$store.dispatch("getUserDetails");
       this.getUserData();
     }
+
+    this.$store.dispatch('getRequestsData');
   },
   mounted() {
     this.maps();

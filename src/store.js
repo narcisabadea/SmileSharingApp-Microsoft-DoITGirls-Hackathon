@@ -8,11 +8,15 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     userDetails: null,
+    requestsDetails: []
   },
   mutations: {
     setUserDetails(state, payload) {
       state.userDetails = payload;
     },
+    setRequestsData(state, payload) {
+      state.requestsDetails = payload;
+    }
   },
   actions: {
     getUserDetails({ commit }) {
@@ -49,8 +53,34 @@ export default new Vuex.Store({
       commit("setUserDetails", null);
       localStorage.clear();
     },
+    getRequestsData({commit}) {
+      firebase.firestore()
+        .collection("Requests")
+        .onSnapshot((snapshot) => {
+          const items = []
+          snapshot.forEach((obj) => {
+            items.push({
+              id: obj.id,
+              car: obj.data().car,
+              dateLeave: obj.data().dateLeave,
+              dropPoint: obj.data().dropPoint,
+              hourLeave: obj.data().hourLeave,
+              localityGoing: obj.data().localityGoing,
+              localityLeave: obj.data().localityLeave,
+              meetingPoint: obj.data().meetingPoint,
+              minLeave: obj.data().minLeave,
+              noSeats: obj.data().noSeats,
+              phone: obj.data().phone,
+              price: obj.data().price,
+              participants: obj.data().participants,
+            });
+          });
+          commit("setRequestsData", items);
+        });
+    }
   },
   getters: {
     userDetails: (state) => state.userDetails,
+    requestsDetails: (state) => state.requestsDetails
   },
 });
