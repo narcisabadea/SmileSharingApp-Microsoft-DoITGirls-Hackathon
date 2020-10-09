@@ -38,17 +38,17 @@
         </div>
         <div class="filters">
           <v-autocomplete
-            :items="carSearchDetails.localityLeaveFilter"
+            :items="localityLeaveFilter"
             label="Locality leaving"
             v-model="carSearchDetails.selectedLocalityLeave"
           ></v-autocomplete>
           <v-autocomplete
-            :items="carSearchDetails.localityGoingFilter"
+            :items="localityGoingFilter"
             label="Locality going"
             v-model="carSearchDetails.selectedlocalityGoing"
           ></v-autocomplete>
           <v-autocomplete
-            :items="carSearchDetails.carTypeFilter"
+            :items="carTypeFilter"
             label="Select car"
             v-model="carSearchDetails.selectedcarType"
           ></v-autocomplete>
@@ -1159,6 +1159,12 @@ export default {
 .v-btn__content {
   font-size: 0.8rem;
   text-transform: inherit;
+}
+.theme--light.v-text-field>.v-input__control>.v-input__slot:before {
+  border-color: var(--primary) !important;
+}
+.mdi-menu-down::before {
+  color: var(--primary) !important;
 }
 .theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
   background-color: var(--primary) !important;
