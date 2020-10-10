@@ -37,147 +37,162 @@
           </div>
         </div>
         <div clas="bottom-part">
-        <div class="filters">
-          <v-autocomplete
-            :items="localityLeaveFilter"
-            label="Locality leaving"
-            v-model="carSearchDetails.selectedLocalityLeave"
-          ></v-autocomplete>
-          <v-autocomplete
-            :items="localityGoingFilter"
-            label="Locality going"
-            v-model="carSearchDetails.selectedlocalityGoing"
-          ></v-autocomplete>
-          <v-select
-            v-model="carSearchDetails.selectedcarType"
-            :items="carTypeFilter"
-            label="Select car"
-          >
-            <template v-slot:item="slotProps">
-              <img
-                class="filter-image"
-                v-if="slotProps.item === 'All types'"
-                src="../src/assets/car-icon.png"
-              />
-              <img
-                class="filter-image"
-                v-if="slotProps.item === 'bmw'"
-                src="../src/assets/car-logos/bmw.png"
-              />
-              <img
-                class="filter-image"
-                v-if="slotProps.item === 'fiat'"
-                src="../src/assets/car-logos/fiat.png"
-              />
-              <img
-                class="filter-image"
-                v-if="slotProps.item === 'ford'"
-                src="../src/assets/car-logos/ford.png"
-              />
-              <img
-                class="filter-image"
-                v-if="slotProps.item === 'matiz'"
-                src="../src/assets/car-logos/matiz.png"
-              />
-              <img
-                class="filter-image"
-                v-if="slotProps.item === 'opel'"
-                src="../src/assets/car-logos/opel.png"
-              />
-              <img
-                class="filter-image"
-                v-if="slotProps.item === 'volkswagen'"
-                src="../src/assets/car-logos/volkswagen.png"
-              />
-              {{ slotProps.item }}
-            </template>
-          </v-select>
-        </div>
-        <div class="results">
-          <div
-            v-for="(item, index) in filteredItems"
-            :key="index"
-            class="result-item"
-          >
-            <div class="result-info">
-              <div class="result-image">
-                <img v-if="!item.car" src="../src/assets/car-icon.png" />
+          <div class="filters">
+            <v-autocomplete
+              :items="localityLeaveFilter"
+              label="Locality leaving"
+              v-model="carSearchDetails.selectedLocalityLeave"
+            ></v-autocomplete>
+            <v-autocomplete
+              :items="localityGoingFilter"
+              label="Locality going"
+              v-model="carSearchDetails.selectedlocalityGoing"
+            ></v-autocomplete>
+            <v-select
+              v-model="carSearchDetails.selectedcarType"
+              :items="carTypeFilter"
+              label="Select car"
+            >
+              <template v-slot:item="slotProps">
                 <img
-                  v-if="item.car === 'bmw'"
+                  class="filter-image"
+                  v-if="slotProps.item === 'All types'"
+                  src="../src/assets/car-icon.png"
+                />
+                <img
+                  class="filter-image"
+                  v-if="slotProps.item === 'bmw'"
                   src="../src/assets/car-logos/bmw.png"
                 />
                 <img
-                  v-if="item.car === 'fiat'"
+                  class="filter-image"
+                  v-if="slotProps.item === 'fiat'"
                   src="../src/assets/car-logos/fiat.png"
                 />
                 <img
-                  v-if="item.car === 'ford'"
+                  class="filter-image"
+                  v-if="slotProps.item === 'ford'"
                   src="../src/assets/car-logos/ford.png"
                 />
                 <img
-                  v-if="item.car === 'matiz'"
+                  class="filter-image"
+                  v-if="slotProps.item === 'matiz'"
                   src="../src/assets/car-logos/matiz.png"
                 />
                 <img
-                  v-if="item.car === 'opel'"
+                  class="filter-image"
+                  v-if="slotProps.item === 'opel'"
                   src="../src/assets/car-logos/opel.png"
                 />
                 <img
-                  v-if="item.car === 'volkswagen'"
+                  class="filter-image"
+                  v-if="slotProps.item === 'volkswagen'"
                   src="../src/assets/car-logos/volkswagen.png"
                 />
+                {{ slotProps.item }}
+              </template>
+            </v-select>
+          </div>
+          <div class="results">
+            <div
+              v-for="(item, index) in filteredItems"
+              :key="index"
+              class="result-item"
+            >
+              <div class="result-info">
+                <div class="result-image">
+                  <img v-if="!item.car" src="../src/assets/car-icon.png" />
+                  <img
+                    v-if="item.car === 'bmw'"
+                    src="../src/assets/car-logos/bmw.png"
+                  />
+                  <img
+                    v-if="item.car === 'fiat'"
+                    src="../src/assets/car-logos/fiat.png"
+                  />
+                  <img
+                    v-if="item.car === 'ford'"
+                    src="../src/assets/car-logos/ford.png"
+                  />
+                  <img
+                    v-if="item.car === 'matiz'"
+                    src="../src/assets/car-logos/matiz.png"
+                  />
+                  <img
+                    v-if="item.car === 'opel'"
+                    src="../src/assets/car-logos/opel.png"
+                  />
+                  <img
+                    v-if="item.car === 'volkswagen'"
+                    src="../src/assets/car-logos/volkswagen.png"
+                  />
+                </div>
+                <div class="result-text-info">
+                  <div>
+                    Date leave:
+                    <span class="bold-value"> {{ item.dateLeave }}</span>
+                  </div>
+                  <div>
+                    From
+                    <span class="bold-value">{{ item.localityLeave }}</span
+                    >, {{ item.meetingPoint }} ({{ item.hourLeave }}:{{
+                      item.minLeave
+                    }}) to
+                    <span class="bold-value">{{ item.localityGoing }}</span
+                    >, {{ item.dropPoint }}
+                  </div>
+                  <div>
+                    Seats available:
+                    <span class="bold-value">{{
+                      item.noSeats -
+                        (item.participants ? item.participants.length : 0)
+                    }}</span
+                    >/{{ item.noSeats }}
+                  </div>
+                  <div>
+                    Price:
+                    <span class="bold-value">{{ item.price }}</span> RON
+                  </div>
+                  <div>
+                    Price:
+                    <span class="bold-value">{{ item.phone }}</span>
+                  </div>
+                </div>
               </div>
-              <div class="result-text-info">
-                <div>
-                  Date leave:
-                  <span class="bold-value"> {{ item.dateLeave }}</span>
-                </div>
-                <div>
-                  From
-                  <span class="bold-value">{{ item.localityLeave }}</span
-                  >, {{ item.meetingPoint }} ({{ item.hourLeave }}:{{
-                    item.minLeave
-                  }}) to <span class="bold-value">{{ item.localityGoing }}</span
-                  >, {{ item.dropPoint }}
-                </div>
-                <div>
-                  Seats available:
-                  <span class="bold-value">{{
-                    item.noSeats -
-                      (item.participants ? item.participants.length : 0)
-                  }}</span
-                  >/{{ item.noSeats }}
-                </div>
-                <div>
-                  Price:
-                  <span class="bold-value">{{ item.price }}</span> RON
-                </div>
-                <div>
-                  Price:
-                  <span class="bold-value">{{ item.phone }}</span>
-                </div>
+              <div class="result-item-action">
+                <v-btn text @click="seeMapRoute(item)"
+                  >View recommended route</v-btn
+                >
+                <v-btn
+                  :disabled="userParticipate(item)"
+                  depressed
+                  @click="apply(item)"
+                  >{{
+                    userParticipate(item)
+                      ? "Participating"
+                      : "Go with this driver"
+                  }}</v-btn
+                >
               </div>
-            </div>
-            <div class="result-item-action">
-              <v-btn text @click="seeMapRoute(item)">View recommended route</v-btn>
-              <v-btn
-                :disabled="userParticipate(item)"
-                depressed
-                @click="apply(item)"
-                >{{
-                  userParticipate(item)
-                    ? "Participating"
-                    : "Go with this driver"
-                }}</v-btn
-              >
             </div>
           </div>
         </div>
-        </div>
       </div>
       <div class="right-column">
-        <div class="error-route" v-if="showRouteError && !showInformationalText">Error in loading map. Please select another course, this one seems to not have all the informations filled.</div>
-        <div v-if="showInformationalText && !showRouteError" class="information-text">Select a result to see the recommended route. This can depend on the driver, please get in touch.</div>
+        <div
+          class="error-route"
+          v-if="showRouteError && !showInformationalText"
+        >
+          Error in loading map. Please select another course, this one seems to
+          not have all the informations filled.
+        </div>
+        <div
+          v-if="showInformationalText && !showRouteError"
+          class="information-text"
+        >
+          Select a result to see the recommended route. This can depend on the
+          driver, please get in touch.
+        </div>
         <div id="map"></div>
       </div>
     </div>
@@ -244,7 +259,8 @@
               </v-col>
               <v-col cols="12" sm="8">
                 <v-flex xs12 sm12 md12>
-                  <vue-google-autocomplete style='border-bottom: 1px solid black; width: 100%'
+                  <vue-google-autocomplete
+                    style="border-bottom: 1px solid black; width: 100%"
                     id="searchMap"
                     type="text"
                     types="(cities)"
@@ -302,7 +318,8 @@
               <v-col cols="12" sm="8">
                 <v-flex xs12 sm12 md12>
                   <vue-google-autocomplete
-                    id="searchMap2" style='border-bottom: 1px solid black; width: 100%'
+                    id="searchMap2"
+                    style="border-bottom: 1px solid black; width: 100%"
                     type="text"
                     types="(cities)"
                     class="input"
@@ -401,7 +418,7 @@
             class="postButton"
             >Post it!</v-btn
           >
-          <div v-if="dialogCarOfferForm.send === true" class='successAlert'>
+          <div v-if="dialogCarOfferForm.send === true" class="successAlert">
             <v-alert :value="true" type="success">Success!</v-alert>
           </div>
         </v-card>
@@ -413,111 +430,152 @@
       </v-container>
     </v-dialog>
     <v-dialog v-model="dialogProfileDetails.showDialog" max-width="80vw">
-      <v-card elevation="2" shaped>
-        <v-flex xs12>
-          <v-card>
-            <v-card-title>Account details</v-card-title>
-            <v-card-text>
-              <v-text-field
-                prepend-icon="account_circle"
-                name="nume"
-                v-if="dialogProfileDetails.data.name"
-                v-model="dialogProfileDetails.data.name"
-                label="Name"
-                id="nume"
-              ></v-text-field>
-              <v-spacer></v-spacer>
-              <v-text-field
-                prepend-icon="account_circle"
-                name="prenume"
-                label="Surname"
-                v-model="dialogProfileDetails.data.surname"
-                id="prenume"
-              ></v-text-field>
-              <v-spacer></v-spacer>
-              <v-text-field
-                prepend-icon="account_circle"
-                name="phone"
-                v-model="dialogProfileDetails.data.phone"
-                label="Phone no."
-                id="phone"
-              ></v-text-field>
-              <v-text-field
-                prepend-icon="account_circle"
-                name="email"
-                v-model="dialogProfileDetails.data.email"
-                label="Email adress"
-                id="email"
-              ></v-text-field>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex xs12>
-          <v-card>
-            <v-card-title>Scheduled rides found</v-card-title>
-            <v-card-text>
-              <v-list three-line id="culoare">
-                <v-list-tile
-                  v-for="(item, index) in dialogProfileDetails.myrides"
-                  :key="index"
-                >
-                  <v-list-tile-content>
-                    <v-list-tile-title
-                      >From
-                      <span>{{ item.localityLeave }}</span>
-                      ({{ item.hourLeave }}:{{ item.minLeave }}) to
-                      <span>{{ item.localityGoing }}</span>
-                    </v-list-tile-title>
-                    <v-list-tile-sub-title class="text-truncate"
-                      >Price: {{ item.price }}RON</v-list-tile-sub-title
-                    >
-                    <v-btn
-                      depressed
-                      small
-                      @click="seeDetails(item.id, index, 'found')"
-                      >See details</v-btn
-                    >
-                    <v-divider></v-divider>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex xs12>
-          <v-card>
-            <v-card-title>Scheduled rides offer</v-card-title>
-            <v-card-text>
-              <v-list three-line id="culoare">
-                <v-list-tile
-                  v-for="(item, index) in dialogProfileDetails.rides"
-                  :key="index"
-                >
-                  <v-list-tile-content>
-                    <v-list-tile-title
-                      >From
-                      <span>{{ item.localityLeave }}</span>
-                      ({{ item.hourLeave }}:{{ item.minLeave }}) to
-                      <span>{{ item.localityGoing }}</span>
-                    </v-list-tile-title>
-                    <v-list-tile-sub-title class="text-truncate"
-                      >Price: {{ item.price }}RON</v-list-tile-sub-title
-                    >
-                    <v-btn
-                      depressed
-                      small
-                      @click="seeDetails(item.id, index, 'offers')"
-                      >See details</v-btn
-                    >
-                    <v-divider></v-divider>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-      </v-card>
+      <v-container>
+        <v-card elevation="2" shaped>
+          <v-card-title>Account details</v-card-title>
+          <v-card-text>
+            <v-row no-gutters>
+              <v-col cols="12" sm="4" align-self="center">
+                Name
+              </v-col>
+              <v-col cols="12" sm="8">
+                <v-flex xs4 sm4 md4>
+                  <v-text-field
+                    name="nume"
+                    v-if="dialogProfileDetails.data.name"
+                    v-model="dialogProfileDetails.data.name"
+                    id="nume"
+                  ></v-text-field>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="4" align-self="center">
+                Surname
+              </v-col>
+              <v-col cols="12" sm="8">
+                <v-flex xs4 sm4 md4>
+                  <v-text-field
+                    name="prenume"
+                    v-model="dialogProfileDetails.data.surname"
+                    id="prenume"
+                  ></v-text-field>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="4" align-self="center">
+                Phone no.
+              </v-col>
+              <v-col cols="12" sm="8">
+                <v-flex xs4 sm4 md4>
+                  <v-text-field
+                    name="phone"
+                    v-model="dialogProfileDetails.data.phone"
+                    id="phone"
+                  ></v-text-field>
+                </v-flex>
+              </v-col>
+            </v-row>
+
+            <v-row no-gutters>
+              <v-col cols="12" sm="4" align-self="center">
+                Email address
+              </v-col>
+              <v-col cols="12" sm="8">
+                <v-flex xs4 sm4 md4>
+                  <v-text-field
+                    name="email"
+                    v-model="dialogProfileDetails.data.email"
+                    id="email"
+                  ></v-text-field>
+                </v-flex>
+              </v-col>
+            </v-row>
+            <v-row no-gutters>
+              <v-col cols="12" sm="6">
+                <v-flex xs12>
+                  <v-card-title>Rides where I am a passenger</v-card-title>
+                  <v-card-text>
+                    <v-list three-line id="culoare">
+                      <template
+                        v-for="(item, index) in dialogProfileDetails.myrides"
+                      >
+                        <v-card  :key="index">
+                          <v-list-item style="margin-bottom: 10px">
+                            <v-list-item-content>
+                              <v-list-item-title
+                                >From
+                                <span>{{ item.localityLeave }}</span>
+                                ({{ item.hourLeave }}:{{ item.minLeave }}) ->
+                                <span>{{ item.localityGoing }}</span>
+                              </v-list-item-title>
+                              <v-list-item-subtitle class="text-truncate"
+                                >Price:
+                                {{ item.price }} RON</v-list-item-subtitle
+                              >
+                              <div>
+                                <v-btn
+                                  depressed
+                                  small
+                                  @click="seeDetails(item.id, index, 'found')"
+                                  >See details</v-btn
+                                >
+                              </div>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-card>
+                      </template>
+                    </v-list>
+                  </v-card-text>
+                </v-flex>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-flex xs12>
+                  <v-card-title>Rides where I am the driver</v-card-title>
+                  <v-card-text>
+                    <v-list three-line id="culoare">
+                      <template
+                        v-for="(item, index) in dialogProfileDetails.rides"
+                        
+                      >
+                        <v-card :key="index"> 
+                          <v-list-item style="margin-bottom: 10px">
+                            <v-list-item-content>
+                              <v-list-item-title
+                                >From
+                                <span>{{ item.localityLeave }}</span>
+                                ({{ item.hourLeave }}:{{ item.minLeave }}) ->
+                                <span>{{ item.localityGoing }}</span>
+                              </v-list-item-title>
+                              <v-list-item-subtitle class="text-truncate"
+                                >Price:
+                                {{ item.price }} RON</v-list-item-subtitle
+                              >
+                              <div>
+                                <v-btn
+                                  depressed
+                                  small
+                                  @click="seeDetails(item.id, index, 'offers')"
+                                  >See details</v-btn
+                                >
+                              </div>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-card>
+                      </template>
+                    </v-list>
+                  </v-card-text>
+                </v-flex>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-container>
     </v-dialog>
+
     <v-dialog v-model="dialogRideDetails.showDialog" max-width="80vw">
       <v-card elevation="2" shaped>
         <v-toolbar dark>
@@ -715,11 +773,11 @@ export default {
       showInformationalText: true,
       showRouteError: false,
       directions: {
-          service: null,
-          display: null,
-          start: null,
-          end: null
-        }
+        service: null,
+        display: null,
+        start: null,
+        end: null,
+      },
     };
   },
   components: { VueGoogleAutocomplete },
@@ -858,46 +916,49 @@ export default {
     seeMapRoute(item) {
       this.showInformationalText = false;
       var map = document.getElementById("map");
-      if (item && item.startLatitude && item.startLongitude && item.finishLatitude && item.finishLongitude) {
+      if (
+        item &&
+        item.startLatitude &&
+        item.startLongitude &&
+        item.finishLatitude &&
+        item.finishLongitude
+      ) {
         this.showRouteError = false;
         map.style.display = "unset";
-      this.dialogCarOfferForm.map = new window.google.maps.Map(
-        map,
-        {
+        this.dialogCarOfferForm.map = new window.google.maps.Map(map, {
           center: {
             lat: +this.filteredItems[0].startLatitude,
             lng: +this.filteredItems[0].startLongitude,
           },
           zoom: 16,
-        }
-      );
-      // DIRECTIONS
-      this.directions.service = new window.google.maps.DirectionsService();
-      this.directions.display = new window.google.maps.DirectionsRenderer();
-      this.directions.start = new window.google.maps.LatLng(
-        this.filteredItems[0].startLatitude,
-        this.filteredItems[0].startLongitude
-      );
-      this.directions.end = new window.google.maps.LatLng(
-        this.filteredItems[0].finishLatitude,
-        this.filteredItems[0].finishLongitude
-      );
-      this.directions.display.setMap(this.dialogCarOfferForm.map);
-      
-      // render directions
+        });
+        // DIRECTIONS
+        this.directions.service = new window.google.maps.DirectionsService();
+        this.directions.display = new window.google.maps.DirectionsRenderer();
+        this.directions.start = new window.google.maps.LatLng(
+          this.filteredItems[0].startLatitude,
+          this.filteredItems[0].startLongitude
+        );
+        this.directions.end = new window.google.maps.LatLng(
+          this.filteredItems[0].finishLatitude,
+          this.filteredItems[0].finishLongitude
+        );
+        this.directions.display.setMap(this.dialogCarOfferForm.map);
+
+        // render directions
         if (this.directions.service) {
           const request = {
             origin: this.directions.start,
             destination: this.directions.end,
-            travelMode: 'DRIVING'
-          }
+            travelMode: "DRIVING",
+          };
           this.directions.service.route(request, (response, status) => {
-            if (status === 'OK') {
-              this.directions.display.setDirections(response)
+            if (status === "OK") {
+              this.directions.display.setDirections(response);
             } else {
-              console.warn('Directions request failed due to ' + status)
+              console.warn("Directions request failed due to " + status);
             }
-          })
+          });
         }
       } else {
         this.showRouteError = true;
@@ -905,6 +966,7 @@ export default {
       }
     },
     seeDetails(id, index, type) {
+      console.log(id, index, type)
       this.dialogRideDetails.showDialog = true;
       if (type === "found") {
         this.dialogRideDetails.selectedItem = this.dialogProfileDetails.rides[
@@ -1070,9 +1132,9 @@ export default {
   font-style: normal;
 }
 #map {
-    height: 100%;
-    width: 100%;
-    display: none;
+  height: 100%;
+  width: 100%;
+  display: none;
 }
 .v-dialog {
   background-color: transparent !important;
@@ -1087,9 +1149,9 @@ export default {
 .container-wrapper .left-column {
   width: 40vw;
   background-color: var(--background-light);
-      display: flex;
-    flex-flow: column;
-    justify-content: space-between;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
 }
 .container-wrapper .right-column {
   width: 60vw;
@@ -1100,12 +1162,12 @@ export default {
 }
 .container-wrapper .left-column .toolbar {
   display: flex;
-  background: url('./assets/banner.png');
+  background: url("./assets/banner.png");
   background-size: cover;
-    background-position: bottom;
+  background-position: bottom;
   justify-content: space-between;
   flex-flow: row;
-      height: 100%;
+  height: 100%;
   padding: 10px 20px;
 }
 .container-wrapper .left-column .toolbar .title {
@@ -1117,7 +1179,7 @@ export default {
 .container-wrapper .left-column .filters {
   display: flex;
   flex-flow: wrap;
-      padding-top: 15px;
+  padding-top: 15px;
   justify-content: center;
   background-color: var(--background-light);
 }
@@ -1141,15 +1203,15 @@ export default {
   color: var(--primary) !important;
 }
 .information-text {
-      margin: 0 20%;
-    text-align: center;
-    opacity: 0.3;
+  margin: 0 20%;
+  text-align: center;
+  opacity: 0.3;
 }
 .error-route {
   margin: 0 20%;
-    text-align: center;
-    opacity: 0.3;
-    color: red;
+  text-align: center;
+  opacity: 0.3;
+  color: red;
 }
 .theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
   background-color: var(--primary) !important;
@@ -1161,10 +1223,10 @@ export default {
 }
 .container-wrapper .left-column .results {
   display: flex;
-    height: -webkit-fill-available;
-    flex-flow: column;
-    overflow-y: auto;
-    max-height: 55vh;
+  height: -webkit-fill-available;
+  flex-flow: column;
+  overflow-y: auto;
+  max-height: 55vh;
 }
 .container-wrapper .left-column .results .result-item {
   background-color: var(--background-white);
