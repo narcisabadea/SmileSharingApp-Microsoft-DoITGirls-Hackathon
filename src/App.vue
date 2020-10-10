@@ -154,7 +154,7 @@
                     <span class="bold-value">{{ item.price }}</span> RON
                   </div>
                   <div>
-                    Price:
+                    Phone:
                     <span class="bold-value">{{ item.phone }}</span>
                   </div>
                 </div>
