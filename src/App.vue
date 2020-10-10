@@ -927,8 +927,8 @@ export default {
         map.style.display = "unset";
         this.dialogCarOfferForm.map = new window.google.maps.Map(map, {
           center: {
-            lat: +this.filteredItems[0].startLatitude,
-            lng: +this.filteredItems[0].startLongitude,
+            lat: +item.startLatitude,
+            lng: +item.startLongitude,
           },
           zoom: 16,
         });
@@ -936,12 +936,12 @@ export default {
         this.directions.service = new window.google.maps.DirectionsService();
         this.directions.display = new window.google.maps.DirectionsRenderer();
         this.directions.start = new window.google.maps.LatLng(
-          this.filteredItems[0].startLatitude,
-          this.filteredItems[0].startLongitude
+          item.startLatitude,
+          item.startLongitude
         );
         this.directions.end = new window.google.maps.LatLng(
-          this.filteredItems[0].finishLatitude,
-          this.filteredItems[0].finishLongitude
+          item.finishLatitude,
+          item.finishLongitude
         );
         this.directions.display.setMap(this.dialogCarOfferForm.map);
 
@@ -1162,7 +1162,7 @@ export default {
 }
 .container-wrapper .left-column .toolbar {
   display: flex;
-  background: url("./assets/banner.png");
+  background: url("./assets/road.jpeg");
   background-size: cover;
   background-position: bottom;
   justify-content: space-between;
