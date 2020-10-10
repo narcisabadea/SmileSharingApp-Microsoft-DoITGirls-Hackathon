@@ -244,12 +244,12 @@
               </v-col>
               <v-col cols="12" sm="8">
                 <v-flex xs12 sm12 md12>
-                  <vue-google-autocomplete
+                  <vue-google-autocomplete style='border-bottom: 1px solid black; width: 100%'
                     id="searchMap"
                     type="text"
                     types="(cities)"
                     class="input"
-                    placeholder="Select location"
+                    placeholder="Enter location"
                     @placechanged="getAddressData"
                   ></vue-google-autocomplete>
                 </v-flex>
@@ -302,11 +302,11 @@
               <v-col cols="12" sm="8">
                 <v-flex xs12 sm12 md12>
                   <vue-google-autocomplete
-                    id="searchMap2"
+                    id="searchMap2" style='border-bottom: 1px solid black; width: 100%'
                     type="text"
                     types="(cities)"
                     class="input"
-                    placeholder="Select going to location"
+                    placeholder="Enter location"
                     @placechanged="getAddressDataFinish"
                   ></vue-google-autocomplete>
                 </v-flex>
@@ -348,7 +348,7 @@
 
             <v-row no-gutters>
               <v-col cols="12" sm="4" align-self="center">
-                Car description
+                Car model
               </v-col>
               <v-col cols="12" sm="8">
                 <v-flex xs12 sm12 md12>
@@ -401,13 +401,9 @@
             class="postButton"
             >Post it!</v-btn
           >
-          <v-card v-if="dialogCarOfferForm.send === true">
+          <div v-if="dialogCarOfferForm.send === true" class='successAlert'>
             <v-alert :value="true" type="success">Success!</v-alert>
-            <v-spacer></v-spacer>
-            <v-btn to="/">
-              <v-icon left>keyboard_arrow_left</v-icon>Back
-            </v-btn>
-          </v-card>
+          </div>
         </v-card>
       </v-container>
       <v-container grid-list-sm>
@@ -639,7 +635,6 @@ export default {
       },
       dialogCarOfferForm: {
         showDialog: false,
-        seats: ["1", "2", "3", "4", "5"],
         hour: [
           "00",
           "01",
@@ -1233,5 +1228,9 @@ export default {
 .postButton {
   margin-left: 50px;
   margin-bottom: 30px;
+}
+.successAlert {
+  margin-left: 30px;
+  margin-right: 30px;
 }
 </style>
