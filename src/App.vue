@@ -163,7 +163,7 @@
                 <v-btn text @click="seeMapRoute(item)"
                   >View recommended route</v-btn
                 >
-                <v-btn
+                <!-- <v-btn
                   :disabled="userParticipate(item)"
                   depressed
                   @click="apply(item)"
@@ -172,7 +172,7 @@
                       ? "Participating"
                       : "Go with this driver"
                   }}</v-btn
-                >
+                > -->
               </div>
             </div>
           </div>
