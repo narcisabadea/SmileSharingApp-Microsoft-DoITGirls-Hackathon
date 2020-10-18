@@ -164,15 +164,16 @@
                   >View recommended route</v-btn
                 >
                 <v-btn
-                  :disabled="userParticipate(item)"
-                  depressed
-                  @click="apply(item)"
-                  >{{
-                    userParticipate(item)
-                      ? "Participating"
-                      : "Go with this driver"
-                  }}</v-btn
-                >
+                    :disabled="userParticipate(item)"
+                    depressed
+                    v-if="userDetails"
+                    @click="apply(item)"
+                    >{{
+                      userParticipate(item)
+                        ? "Participating"
+                        : "Go with this driver"
+                    }}</v-btn
+                  >
               </div>
             </div>
           </div>
