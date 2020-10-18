@@ -164,16 +164,16 @@
                   >View recommended route</v-btn
                 >
                 <v-btn
-                    :disabled="userParticipate(item)"
-                    depressed
-                    v-if="userDetails"
-                    @click="apply(item)"
-                    >{{
-                      userParticipate(item)
-                        ? "Participating"
-                        : "Go with this driver"
-                    }}</v-btn
-                  >
+                  :disabled="userParticipate(item)"
+                  depressed
+                  v-if="userDetails"
+                  @click="apply(item)"
+                  >{{
+                    userParticipate(item)
+                      ? "Participating"
+                      : "Go with this driver"
+                  }}</v-btn
+                >
               </div>
             </div>
           </div>
@@ -436,8 +436,12 @@
           <v-card-title>Account details</v-card-title>
           <v-card-text>
             <v-row no-gutters>
-              
-              <v-col cols="12" sm="4" align-self="center" style="padding-left: 30px">
+              <v-col
+                cols="12"
+                sm="4"
+                align-self="center"
+                style="padding-left: 30px"
+              >
                 Name
               </v-col>
               <v-col cols="12" sm="8">
@@ -453,7 +457,12 @@
             </v-row>
 
             <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center" style="padding-left: 30px">
+              <v-col
+                cols="12"
+                sm="4"
+                align-self="center"
+                style="padding-left: 30px"
+              >
                 Surname
               </v-col>
               <v-col cols="12" sm="8">
@@ -468,7 +477,12 @@
             </v-row>
 
             <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center" style="padding-left: 30px">
+              <v-col
+                cols="12"
+                sm="4"
+                align-self="center"
+                style="padding-left: 30px"
+              >
                 Phone no.
               </v-col>
               <v-col cols="12" sm="8">
@@ -483,7 +497,12 @@
             </v-row>
 
             <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center" style="padding-left: 30px">
+              <v-col
+                cols="12"
+                sm="4"
+                align-self="center"
+                style="padding-left: 30px"
+              >
                 Email address
               </v-col>
               <v-col cols="12" sm="8">
@@ -505,7 +524,7 @@
                       <template
                         v-for="(item, index) in dialogProfileDetails.myrides"
                       >
-                        <v-card  :key="index">
+                        <v-card :key="index">
                           <v-list-item style="margin-bottom: 10px">
                             <v-list-item-content>
                               <v-list-item-title
@@ -541,9 +560,8 @@
                     <v-list three-line id="culoare">
                       <template
                         v-for="(item, index) in dialogProfileDetails.rides"
-                        
                       >
-                        <v-card :key="index"> 
+                        <v-card :key="index">
                           <v-list-item style="margin-bottom: 10px">
                             <v-list-item-content>
                               <v-list-item-title
@@ -580,176 +598,174 @@
 
     <v-dialog v-model="dialogRideDetails.showDialog" max-width="80vw">
       <v-container>
-      <v-card elevation="2" shaped>
-         <v-card-title>Ride details </v-card-title>
-        <v-card-text>
-             <v-card-text>
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Departure date
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-flex xs4 sm4 md4>
-                  <v-textarea
-                    auto-grow
-                    rows="1"
-                    v-model="dialogRideDetails.selectedItem.dateLeave"
-                  ></v-textarea>
-                </v-flex>
-              </v-col>
-            </v-row>
-
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Leaving from
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-flex xs12 sm12 md12>
-                 <v-textarea
-                    auto-grow
-                    rows="1"
-                    v-model="dialogRideDetails.selectedItem.localityLeave"
-                  ></v-textarea>
-                </v-flex>
-              </v-col>
-            </v-row>
-
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Leaving time
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-row>
-                  <v-col cols="12" sm="6" align-self="center">
+        <v-card elevation="2" shaped>
+          <v-card-title>Ride details </v-card-title>
+          <v-card-text>
+            <v-card-text>
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Departure date
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-flex xs4 sm4 md4>
                     <v-textarea
-                    auto-grow
-                    rows="1"
-                    v-model="dialogRideDetails.selectedItem.hourLeave"
-                  ></v-textarea>
-                  </v-col>
-                  <v-col cols="12" sm="6" align-self="center">
-                     <v-textarea
-                    auto-grow
-                    rows="1"
-                    v-model="dialogRideDetails.selectedItem.minLeave"
-                  ></v-textarea>
-                  </v-col>
-                </v-row>
-              </v-col>
-            </v-row>
+                      auto-grow
+                      rows="1"
+                      v-model="dialogRideDetails.selectedItem.dateLeave"
+                    ></v-textarea>
+                  </v-flex>
+                </v-col>
+              </v-row>
 
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Meeting point
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-flex xs12 sm12 md12>
-                  <v-textarea
-                    auto-grow
-                    rows="1"
-                    v-model="dialogRideDetails.selectedItem.meetingPoint"
-                  ></v-textarea>
-                </v-flex>
-              </v-col>
-            </v-row>
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Leaving from
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      auto-grow
+                      rows="1"
+                      v-model="dialogRideDetails.selectedItem.localityLeave"
+                    ></v-textarea>
+                  </v-flex>
+                </v-col>
+              </v-row>
 
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Going to
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-flex xs12 sm12 md12>
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Leaving time
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-row>
+                    <v-col cols="12" sm="6" align-self="center">
                       <v-textarea
-                    auto-grow
-                    rows="1"
-                    v-model="dialogRideDetails.selectedItem.localityGoing"
-                  ></v-textarea>
-                </v-flex>
-              </v-col>
-            </v-row>
+                        auto-grow
+                        rows="1"
+                        v-model="dialogRideDetails.selectedItem.hourLeave"
+                      ></v-textarea>
+                    </v-col>
+                    <v-col cols="12" sm="6" align-self="center">
+                      <v-textarea
+                        auto-grow
+                        rows="1"
+                        v-model="dialogRideDetails.selectedItem.minLeave"
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
 
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Drop off
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-flex xs12 sm12 md12>
-                  <v-textarea
-                    auto-grow
-                    rows="1"
-                    v-model="dialogRideDetails.selectedItem.dropPoint"
-                  ></v-textarea>
-                </v-flex>
-              </v-col>
-            </v-row>
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Meeting point
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      auto-grow
+                      rows="1"
+                      v-model="dialogRideDetails.selectedItem.meetingPoint"
+                    ></v-textarea>
+                  </v-flex>
+                </v-col>
+              </v-row>
 
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Seats available
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-flex xs12 sm12 md12>
-                 <v-textarea
-                    auto-grow
-                    rows="1"
-                    v-model="dialogRideDetails.selectedItem.noSeats"
-                  ></v-textarea>
-                </v-flex>
-              </v-col>
-            </v-row>
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Going to
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      auto-grow
+                      rows="1"
+                      v-model="dialogRideDetails.selectedItem.localityGoing"
+                    ></v-textarea>
+                  </v-flex>
+                </v-col>
+              </v-row>
 
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Car model
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-flex xs12 sm12 md12>
-                  <v-textarea
-                    auto-grow
-                    rows="1"
-                    label="Short description"
-                    v-model="dialogRideDetails.selectedItem.car"
-                  ></v-textarea>
-                </v-flex>
-              </v-col>
-            </v-row>
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Drop off
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      auto-grow
+                      rows="1"
+                      v-model="dialogRideDetails.selectedItem.dropPoint"
+                    ></v-textarea>
+                  </v-flex>
+                </v-col>
+              </v-row>
 
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Price per person
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-flex xs12 sm12 md12>
-                  <v-textarea
-                    auto-grow
-                    rows="1"
-                    label="Price (RON)"
-                    v-model="dialogRideDetails.selectedItem.price"
-                  ></v-textarea>
-                </v-flex>
-              </v-col>
-            </v-row>
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Seats available
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      auto-grow
+                      rows="1"
+                      v-model="dialogRideDetails.selectedItem.noSeats"
+                    ></v-textarea>
+                  </v-flex>
+                </v-col>
+              </v-row>
 
-            <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
-                Phone number
-              </v-col>
-              <v-col cols="12" sm="8">
-                <v-flex xs12 sm12 md12>
-                  <v-textarea
-                    auto-grow
-                    rows="1"
-                    label="Tel. no."
-                    v-model="dialogRideDetails.selectedItem.phone"
-                  ></v-textarea>
-                </v-flex>
-              </v-col>
-            </v-row>
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Car model
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      auto-grow
+                      rows="1"
+                      label="Short description"
+                      v-model="dialogRideDetails.selectedItem.car"
+                    ></v-textarea>
+                  </v-flex>
+                </v-col>
+              </v-row>
+
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Price per person
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      auto-grow
+                      rows="1"
+                      label="Price (RON)"
+                      v-model="dialogRideDetails.selectedItem.price"
+                    ></v-textarea>
+                  </v-flex>
+                </v-col>
+              </v-row>
+
+              <v-row no-gutters>
+                <v-col cols="12" sm="4" align-self="center">
+                  Phone number
+                </v-col>
+                <v-col cols="12" sm="8">
+                  <v-flex xs12 sm12 md12>
+                    <v-textarea
+                      auto-grow
+                      rows="1"
+                      label="Tel. no."
+                      v-model="dialogRideDetails.selectedItem.phone"
+                    ></v-textarea>
+                  </v-flex>
+                </v-col>
+              </v-row>
+            </v-card-text>
           </v-card-text>
-
-        </v-card-text>
-       
-      </v-card>
+        </v-card>
       </v-container>
     </v-dialog>
   </v-app>
@@ -861,6 +877,7 @@ export default {
   components: { VueGoogleAutocomplete },
   computed: {
     userDetails() {
+
       return this.$store.getters.userDetails;
     },
     requestsDetails() {
@@ -909,6 +926,14 @@ export default {
       });
       return carTypeData;
     },
+  },
+  watch: {
+    userDetails: {
+      deep: true,
+      handler: function () {
+        this.getUserData();
+      }
+    }
   },
   methods: {
     login() {
@@ -1090,7 +1115,7 @@ export default {
       firebase
         .firestore()
         .collection("Users")
-        .doc(this.dialogProfileDetails.data.username)
+        .doc(this.userDetails.username)
         .get()
         .then((snapshot) => {
           let details = {
@@ -1109,7 +1134,7 @@ export default {
         });
 
       let rides1 = [];
-      this.dialogProfileDetails.data.rides.forEach((item) => {
+      this.userDetails.rides.forEach((item) => {
         firebase
           .firestore()
           .collection("Requests")
@@ -1134,7 +1159,7 @@ export default {
       });
       this.dialogProfileDetails.rides = rides1;
       let rides2 = [];
-      this.dialogProfileDetails.data.myrides.forEach((item) => {
+      this.userDetails.myrides.forEach((item) => {
         firebase
           .firestore()
           .collection("Requests")
@@ -1168,6 +1193,9 @@ export default {
 
     if (this.dialogProfileDetails.data.username !== "") {
       this.$store.dispatch("getUserDetails");
+    }
+
+    if (this.dialogProfileDetails.data.username) {
       this.getUserData();
     }
 
