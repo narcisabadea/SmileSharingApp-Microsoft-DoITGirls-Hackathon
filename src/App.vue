@@ -163,7 +163,7 @@
                 <v-btn text @click="seeMapRoute(item)"
                   >View recommended route</v-btn
                 >
-                <!-- <v-btn
+                <v-btn
                   :disabled="userParticipate(item)"
                   depressed
                   @click="apply(item)"
@@ -172,7 +172,7 @@
                       ? "Participating"
                       : "Go with this driver"
                   }}</v-btn
-                > -->
+                >
               </div>
             </div>
           </div>
@@ -435,7 +435,8 @@
           <v-card-title>Account details</v-card-title>
           <v-card-text>
             <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
+              
+              <v-col cols="12" sm="4" align-self="center" style="padding-left: 30px">
                 Name
               </v-col>
               <v-col cols="12" sm="8">
@@ -451,7 +452,7 @@
             </v-row>
 
             <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
+              <v-col cols="12" sm="4" align-self="center" style="padding-left: 30px">
                 Surname
               </v-col>
               <v-col cols="12" sm="8">
@@ -466,7 +467,7 @@
             </v-row>
 
             <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
+              <v-col cols="12" sm="4" align-self="center" style="padding-left: 30px">
                 Phone no.
               </v-col>
               <v-col cols="12" sm="8">
@@ -481,7 +482,7 @@
             </v-row>
 
             <v-row no-gutters>
-              <v-col cols="12" sm="4" align-self="center">
+              <v-col cols="12" sm="4" align-self="center" style="padding-left: 30px">
                 Email address
               </v-col>
               <v-col cols="12" sm="8">
