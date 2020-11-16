@@ -1,4 +1,4 @@
-# Smile Sharing App made for DoITGirls Hackathon sponsored by Microsoft - Ride sharing app
+# Smile Sharing App made for DoITGirls Hackathon sponsored by Microsoft
 
 Ride sharing application created using HTML, Vue.js, Vuetify, JavaScript and Google Maps.
 
